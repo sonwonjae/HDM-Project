@@ -1,0 +1,37 @@
+{
+  "name": "HDM-Project",
+  "version": "1.0.0",
+  "scripts": {
+    "build:sass": "sass -w src/scss/index.scss:public/css/foo.css",
+    "build": "webpack -w",
+    "start:frontend": "webpack serve",
+    "start:backend": "nodemon server"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.15.7",
+    "@babel/core": "^7.15.8",
+    "@babel/plugin-transform-runtime": "^7.15.8",
+    "@babel/preset-env": "^7.15.8",
+    "babel-eslint": "^10.1.0",
+    "babel-loader": "^8.2.3",
+    "css-loader": "^6.5.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb-base": "^14.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-html": "^6.2.0",
+    "eslint-plugin-import": "^2.24.2",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.4.3",
+    "nodemon": "^2.0.14",
+    "prettier": "2.4.1",
+    "sass": "^1.43.4",
+    "sass-loader": "^12.3.0",
+    "webpack": "^5.60.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.4.0"
+  },
+  "dependencies": {
+    "axios": "^0.24.0",
+    "express": "^4.17.1"
+  }
+}
