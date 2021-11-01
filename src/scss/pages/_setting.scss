@@ -1,0 +1,135 @@
+@forward './common';
+@use '../base' as *;
+
+.container {
+  padding: 28px;
+  overflow-y: scroll;
+}
+
+input {
+  border-radius: 3px;
+  background-color: #f6f6f6;
+  border: none;
+  width: 100%;
+  height: 40px;
+  padding: 10px;
+}
+
+.interview {
+  display: flex;
+  flex-direction: column;
+}
+
+button {
+  border-radius: 10px;
+  border: none;
+}
+
+label {
+  margin-bottom: 8px;
+}
+
+.interview-setting {
+  @include desktop {
+    width: 60%;
+  }
+
+  &__all {
+    @include desktop {
+      display: flex;
+      justify-content: space-around;
+    }
+  }
+
+  &__kind,
+  &__cnt,
+  &__time {
+    display: flex;
+    flex-direction: column;
+    margin-bottom: 22px;
+  }
+
+  &__kind select,
+  &__time select {
+    width: 100%;
+    height: 40px;
+    padding: 10px;
+    background-color: #f6f6f6;
+    border-radius: 3px;
+    border: none;
+  }
+
+  &__check {
+    @include desktop {
+      width: 40%;
+      margin-left: 30px;
+    }
+    display: flex;
+    flex-direction: column;
+
+    span {
+      margin-top: 10px;
+      margin-bottom: 10px;
+    }
+
+    &--btn {
+      display: flex;
+      flex-direction: row;
+      margin-top: 10px;
+      justify-content: space-evenly;
+
+      &-icamera {
+        width: 46px;
+        height: 41px;
+        background-image: url('/src/img/camera.png');
+        background-size: cover;
+        display: inline-block;
+      }
+
+      &-iaudio {
+        width: 40px;
+        height: 51px;
+        background-image: url('/src/img/audio.png');
+        background-size: cover;
+        display: inline-block;
+      }
+
+      &-camera,
+      &-audio {
+        background-color: $main;
+        min-width: 90px;
+        height: 100px;
+      }
+
+      &-camera {
+        margin-right: 33px;
+      }
+    }
+  }
+
+  &__start {
+    width: 100%;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 17px;
+
+    & button {
+      background-color: $main;
+      color: $white;
+      width: 186px;
+      height: 58px;
+      margin-top: 37px;
+      text-align: center;
+    }
+  }
+
+  &__info {
+    margin-top: 54px;
+    text-align: center;
+  }
+
+  &__comment {
+    margin-top: 22px;
+    text-align: center;
+  }
+}
