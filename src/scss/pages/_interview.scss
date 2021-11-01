@@ -3,3 +3,107 @@
 body {
   background-color: $main;
 }
+
+.interview {
+  min-width: 315px;
+  display: flex;
+  flex-direction: column;
+  height: 85%;
+  justify-content: space-between;
+
+  &__count {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: $white;
+  }
+
+  &__cam {
+    position: relative;
+    margin: 0 auto;
+    border-radius: 20px;
+    width: 100%;
+    min-height: 60%;
+    max-width: 800px;
+    background-color: $white;
+    @include desktop {
+      min-height: 70%;
+    }
+
+    &-main {
+      width: 100%;
+      height: 100%;
+    }
+    &-description {
+      position: absolute;
+      bottom: 0;
+      text-align: center;
+      width: 100%;
+      font-size: 32px;
+      background-color: rgba($color: #000000, $alpha: 0.6);
+      border-radius: 0 0 20px 20px;
+      color: $white;
+      padding: 20px;
+    }
+  }
+
+  &__audio {
+    width: 100%;
+    max-width: 800px;
+    align-self: center;
+    display: flex;
+    justify-content: flex-end;
+
+    &-icon {
+      min-height: 42px;
+      margin-bottom: -20px;
+      width: 42px;
+      height: 42px;
+      align-self: flex-end;
+      border-radius: 50%;
+      background-color: $white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+      &--active {
+        width: 26px;
+        height: 26px;
+        border-radius: 50%;
+        background-color: $red;
+      }
+    }
+  }
+
+  &__timer {
+    font-weight: 300;
+    font-size: 68px;
+    text-align: center;
+    color: $white;
+    letter-spacing: 0.05rem;
+    margin-top: -20px;
+    @include desktop {
+      font-size: 80px;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+    max-width: 800px;
+    width: 100%;
+    align-self: center;
+    & button {
+      font-size: 20px;
+      font-weight: 700;
+      padding: 16px 32px;
+      border: none;
+      background-color: $white;
+      color: $dark-gray;
+      border-radius: 10px;
+      &:first-child {
+      }
+    }
+  }
+}
