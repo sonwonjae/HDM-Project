@@ -4,8 +4,8 @@ const SCROLL_DOWN_PAGE_Y = 200;
 
 // DOM Nodes--------------------
 const $scrollUp = document.querySelector('.scroll-up');
-// Event Binding----------------
 
+// Event Binding----------------
 window.onscroll = _.throttle(() => {
   window.pageYOffset > SCROLL_DOWN_PAGE_Y ? ($scrollUp.style.display = 'block') : ($scrollUp.style.display = 'none');
 }, EXECUTE_AFTER_MILLISECOND);
