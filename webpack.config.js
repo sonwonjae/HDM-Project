@@ -17,6 +17,18 @@ module.exports = {
     new HtmlWebpackPlugin({
       template: 'src/template/index.html',
     }),
+    new HtmlWebpackPlugin({
+      filename: 'setting.html',
+      template: 'src/template/setting.html',
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'interview.html',
+      template: 'src/template/interview.html',
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'report.html',
+      template: 'src/template/report.html',
+    }),
     new MiniCssExtractPlugin({ filename: 'css/style.css' }),
   ],
   // https://webpack.js.org/configuration/module
