@@ -54,7 +54,7 @@
   }
 
   @include desktop {
-    margin-bottom: 60px;
+    margin-bottom: 30px;
     padding: 40px;
 
     .section__slogan {
@@ -78,6 +78,7 @@
 }
 
 .article {
+  background-color: $white;
   @include mobile {
     padding: 0 15px;
   }
@@ -86,9 +87,15 @@
   }
 }
 .article__title {
-  margin-bottom: 10px;
   color: $dark-gray;
   font-weight: 700;
+  @include mobile {
+    margin-bottom: 10px;
+  }
+  @include desktop {
+    font-size: 24px;
+    margin-bottom: 30px;
+  }
 }
 
 .img-card {
@@ -100,7 +107,8 @@
   }
 }
 .employment {
-  margin-bottom: 25px;
+  padding-top: 25px;
+  padding-bottom: 25px;
   .content {
     padding: 10px 15px;
   }
@@ -116,7 +124,6 @@
 }
 
 .news {
-  padding-bottom: 15px;
   &__list {
     display: flex;
   }
@@ -128,5 +135,11 @@
       color: $dark-gray;
       text-align: center;
     }
+  }
+  @include mobile {
+    padding-bottom: 15px;
+  }
+  @include desktop {
+    padding-bottom: 40px;
   }
 }
