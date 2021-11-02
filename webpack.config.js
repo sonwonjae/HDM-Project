@@ -72,12 +72,24 @@ module.exports = {
     open: true,
     // https://webpack.js.org/configuration/dev-server/#devserverport
     port: 'auto',
-    proxy: {
-      '/news': {
-        target: 'http://localhost:3000/news',
-        pathRewrite: { '^/news': '' }, // api라고 안하고 다른거(todos)라고 할 땐 이 옵션을 써줘야함
+    proxy: [
+      {
+        context: '/news',
+        target: 'http://localhost:3000/',
       },
-    },
+      {
+        context: '/questionList',
+        target: 'http://localhost:3000/',
+      },
+      {
+        context: '/userInfo/update',
+        target: 'http://localhost:3000/',
+      },
+      {
+        context: '/userInfo',
+        target: 'http://localhost:3000/',
+      },
+    ],
   },
   // 소스 맵(Source Map)은 디버깅을 위해 번들링된 파일과 번들링되기 이전의 소스 파일을 연결해주는 파일이다.
   // 디버깅용이기 때문에 개발할 때만 필요하고 배포할 땐 필요가 없다.
