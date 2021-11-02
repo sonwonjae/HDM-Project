@@ -88,6 +88,10 @@ module.exports = {
         target: 'http://localhost:3000/',
       },
       {
+        context: '/mockInterview',
+        target: 'http://localhost:3000/',
+      },
+      {
         context: '/questionList',
         target: 'http://localhost:3000/',
       },
