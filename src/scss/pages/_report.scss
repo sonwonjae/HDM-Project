@@ -1,0 +1,63 @@
+@use './../base' as *;
+.main-wrapper .report-container {
+  padding: rem(20px);
+  height: auto;
+}
+h2 {
+  font-size: rem(24px);
+  padding-bottom: rem(20px);
+}
+h3 {
+  font-size: rem(20px);
+  padding-bottom: rem(20px);
+}
+h4 {
+  text-align: left;
+  padding-bottom: rem(16px);
+}
+.total-time {
+  padding-bottom: rem(16px);
+}
+.average-time {
+  padding-bottom: rem(16px);
+}
+.interview-question {
+  height: rem(150px);
+  // width: rem(200px);
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-around;
+  position: relative;
+
+  @include mobile {
+    display: block;
+    // text-align: center;
+  }
+}
+.record-list {
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  padding-bottom: rem(20px);
+  &__no {
+    padding: rem(10px) 0;
+    .download {
+      padding: rem(6px);
+      background-image: url('/src/img/Vector.png');
+      background-size: cover;
+      border: none;
+      position: absolute;
+      top: 10px;
+      right: 0;
+    }
+  }
+}
+.scroll-up {
+  position: fixed;
+  bottom: rem(20px);
+  padding: rem(13px);
+  background-image: url('/src/img/Group\ 32.png');
+  background-size: cover;
+  border: none;
+  left: 50%;
+}
