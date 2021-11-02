@@ -9,7 +9,7 @@
     "es2021": true,
     "node": true
   },
-  "globals": { "_": true },
+  "globals": { "_": true, "axios": true },
   "plugins": ["import", "html"],
   "extends": ["airbnb-base", "prettier"],
   "rules": {
@@ -42,6 +42,7 @@
       }
     ],
     "import/no-extraneous-dependencies": ["error", { "devDependencies": true }],
+    "import/extensions": "off",
     "max-len": [
       "error",
       {

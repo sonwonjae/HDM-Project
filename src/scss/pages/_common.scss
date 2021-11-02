@@ -30,70 +30,69 @@
     border-radius: 5px;
     height: 85%;
   }
-
-  @include desktop {
-    body {
-      padding: 0 40px 40px 40px;
-    }
-    .log-out {
-      line-height: 102px;
-      font-size: 52px;
-    }
-    .title {
-      font-size: 42px;
-    }
-    .container {
-      border-radius: 15px;
-    }
+}
+@include desktop {
+  .main-wrapper {
+    padding: 0 40px 40px 40px;
   }
-
-  .modal-outer {
-    background-color: rgba($color: #000000, $alpha: 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+  .log-out {
+    line-height: 102px;
+    font-size: 52px;
   }
-
-  .modal {
-    margin: 0 15px;
-    max-width: 320px;
-    height: 240px;
+  .title {
+    font-size: 42px;
+  }
+  .container {
     border-radius: 15px;
-    background-color: $white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-flow: column;
-    padding: 20px;
-    letter-spacing: 0.05rem;
+  }
+}
 
-    &__title {
-      margin-top: 20px;
-      font-size: 24px;
+.modal-outer {
+  background-color: rgba($color: #000000, $alpha: 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.modal {
+  margin: 0 15px;
+  // max-width: 320px;
+  height: 240px;
+  border-radius: 15px;
+  background-color: $white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-flow: column;
+  padding: 20px;
+  letter-spacing: 0.05rem;
+
+  &__title {
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
+  }
+
+  &__describtion {
+    line-height: 1.5;
+    text-align: center;
+  }
+
+  &__button {
+    border: none;
+    padding: 18px 32px;
+    border-radius: 10px;
+
+    &--active {
+      background-color: $main;
+      color: $white;
       font-weight: bold;
-    }
-
-    &__describtion {
-      line-height: 1.5;
-      text-align: center;
-    }
-
-    &__button {
-      border: none;
-      padding: 18px 32px;
-      border-radius: 10px;
-
-      &--active {
-        background-color: $main;
-        color: $white;
-        font-weight: bold;
-        font-size: 20px;
-      }
+      font-size: 20px;
     }
   }
 }

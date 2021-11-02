@@ -5,7 +5,13 @@ const HtmlWebpackPlugin = require('html-webpack-plugin');
 module.exports = {
   // entry file
   // https://webpack.js.org/configuration/entry-context/#entry
-  entry: { index: './src/js/app.js' },
+  entry: {
+    app: './src/js/app.js',
+    home: './src/js/home.js',
+    setting: './src/js/setting',
+    interview: './src/js/interview.js',
+    report: './src/js/report.js',
+  },
   // 번들링된 js 파일의 이름(filename)과 저장될 경로(path)를 지정
   // https://webpack.js.org/configuration/output/#outputpath
   // https://webpack.js.org/configuration/output/#outputfilename
@@ -16,18 +22,22 @@ module.exports = {
   plugins: [
     new HtmlWebpackPlugin({
       template: 'src/template/index.html',
+      chunks: ['app', 'home'],
     }),
     new HtmlWebpackPlugin({
       filename: 'setting.html',
       template: 'src/template/setting.html',
+      chunks: ['app', 'setting'],
     }),
     new HtmlWebpackPlugin({
       filename: 'interview.html',
       template: 'src/template/interview.html',
+      chunks: ['app', 'interview'],
     }),
     new HtmlWebpackPlugin({
       filename: 'report.html',
       template: 'src/template/report.html',
+      chunks: ['app', 'report'],
     }),
     new MiniCssExtractPlugin({ filename: 'css/style.css' }),
   ],
@@ -72,12 +82,28 @@ module.exports = {
     open: true,
     // https://webpack.js.org/configuration/dev-server/#devserverport
     port: 'auto',
-    proxy: {
-      '/todos': {
-        target: 'http://localhost:3000/todos',
-        pathRewrite: { '^/todos': '' }, // api라고 안하고 다른거(todos)라고 할 땐 이 옵션을 써줘야함
+    proxy: [
+      {
+        context: '/news',
+        target: 'http://localhost:3000/',
       },
-    },
+      {
+        context: '/mockInterview',
+        target: 'http://localhost:3000/',
+      },
+      {
+        context: '/questionList',
+        target: 'http://localhost:3000/',
+      },
+      {
+        context: '/userInfo/update',
+        target: 'http://localhost:3000/',
+      },
+      {
+        context: '/userInfo',
+        target: 'http://localhost:3000/',
+      },
+    ],
   },
   // 소스 맵(Source Map)은 디버깅을 위해 번들링된 파일과 번들링되기 이전의 소스 파일을 연결해주는 파일이다.
   // 디버깅용이기 때문에 개발할 때만 필요하고 배포할 땐 필요가 없다.
