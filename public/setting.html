@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet" />
+    <title>Document</title>
+  <script defer src="js/index.bundle.js"></script><link href="css/style.css" rel="stylesheet"></head>
+  <body>
+    <i class="bx bx-log-out log-out"></i>
+    <h2 class="title">면접 설정</h2>
+    <div class="container"></div>
+    <label
+      >면접 카테고리
+      <select name="interview-kind">
+        <option value="tenacity">인성면접</option>
+        <option value="Frontend">Frontend</option>
+        <option value="Backend">Backend</option>
+      </select>
+    </label>
+    <div class="interview-cnt">
+      <label>질문 개수<input type="text" />개</label>
+    </div>
+    <div class="interview-time">
+      <label>질문 별 답변 시간<input type="text" />분</label>
+    </div>
+    <script src="../js/setting.js"></script>
+  </body>
+</html>

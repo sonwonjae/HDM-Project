@@ -73,9 +73,9 @@ module.exports = {
     // https://webpack.js.org/configuration/dev-server/#devserverport
     port: 'auto',
     proxy: {
-      '/todos': {
-        target: 'http://localhost:3000/todos',
-        pathRewrite: { '^/todos': '' }, // api라고 안하고 다른거(todos)라고 할 땐 이 옵션을 써줘야함
+      '/news': {
+        target: 'http://localhost:3000/news',
+        pathRewrite: { '^/news': '' }, // api라고 안하고 다른거(todos)라고 할 땐 이 옵션을 써줘야함
       },
     },
   },

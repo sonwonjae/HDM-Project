@@ -1,38 +1,62 @@
 <!DOCTYPE html>
 <html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="stylesheet" href="../css/index.css" />
+    <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet" />
+    <title>Document</title>
+  </head>
 
-<head>
-  <meta charset="UTF-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="../css/index.css" />
-  <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet" />
-  <title>Document</title>
-</head>
-
-<body>
-  <div class="main-wrapper">
-    <i class="bx bx-log-out log-out"></i>
-    <h2 class="title">면접 설정</h2>
-    <div class="container">
-      <div class="interview kind">
-        <label>면접 카테고리
-          <select name="interview__kind--select">
-            <option value="tenacity">인성면접</option>
-            <option value="Frontend">Frontend</option>
-            <option value="Backend">Backend</option>
-          </select>
-        </label>
-      </div>
-      <div class="interview cnt">
-        <label>질문 개수<input type="text" />개</label>
-      </div>
-      <div class="interview time">
-        <label>질문 별 답변 시간<input type="text" />분</label>
+  <body>
+    <div class="main-wrapper">
+      <i class="bx bx-log-out log-out"></i>
+      <h2 class="title">면접 설정</h2>
+      <div class="container">
+        <div class="interview-setting__all">
+          <div class="interview-setting">
+            <div class="interview-setting__kind">
+              <label>면접 카테고리 </label>
+              <select name="interview-setting__kind select">
+                <option value="tenacity">인성면접</option>
+                <option value="Frontend">Frontend</option>
+                <option value="Backend">Backend</option>
+              </select>
+            </div>
+            <div class="interview-setting__cnt">
+              <label>질문 개수</label><input type="text" placeholder="질문 개수를 20개 이하로 입력해주세요." />
+            </div>
+            <div class="interview-setting__time">
+              <label>질문 별 답변 시간</label>
+              <select name="interview-setting__time select">
+                <option value="1min">1분</option>
+                <option value="2min">2분</option>
+                <option value="3min">3분</option>
+                <option value="5min">5분</option>
+                <option value="10min">10분</option>
+                <option value="15min">15분</option>
+              </select>
+            </div>
+          </div>
+          <div class="interview-setting__check">
+            <label>점검하기</label>
+            <span>모의 면접은 카메라와 오디오 기반으로 진행됩니다. 카메라와 마이크 권한을 허용해주세요</span>
+            <div class="interview-setting__check--btn">
+              <button class="interview-setting__check--btn-camera">
+                <div class="interview-setting__check--btn-icamera"></div>
+              </button>
+              <button class="interview-setting__check--btn-audio">
+                <div class="interview-setting__check--btn-iaudio"></div>
+              </button>
+            </div>
+          </div>
+        </div>
+        <!-- <div class="interview-setting__info"><span>선택한 Frontend 면접은 0문항으로 약 0분동안 진행됩니다.</span></div>
+        <div class="interview-setting__comment"><span>면접준비가 되었다면 면접 시작하기 버튼을 눌러주세요.</span></div> -->
+        <div class="interview-setting__start"><button>면접 시작하기</button></div>
       </div>
     </div>
-  </div>
-  <script src="../js/setting.js"></script>
-</body>
-
+    <script src="../js/setting.js"></script>
+  </body>
 </html>
