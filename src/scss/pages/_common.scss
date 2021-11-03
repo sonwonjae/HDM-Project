@@ -88,6 +88,13 @@
     padding: 18px 32px;
     border-radius: 10px;
 
+    &:disabled {
+      // border: 5px solid $light-gray;
+      box-shadow: 0 0 0 5px $light-gray inset;
+      background-color: transparent;
+      color: $light-gray;
+    }
+
     &--active {
       background-color: $main;
       color: $white;

@@ -14,6 +14,7 @@ const $interviewButtonsRepeat = document.querySelector('.interview-buttons__repe
 const $interviewButtonsSubmit = document.querySelector('.interview-buttons__submit');
 
 const $modalOuter = document.querySelector('.modal-outer');
+const $modalTitle = document.querySelector('.modal__title');
 const $modalButton = document.querySelector('.modal__button');
 const $modalCancle = document.querySelector('.cancle');
 
@@ -21,10 +22,10 @@ const $modalCancle = document.querySelector('.cancle');
 const startTime = 180;
 const stopTime = 20;
 let currentInterview = 1;
-const totalInterview = 3;
+const totalInterview = 5;
 
 // async function
-async function playVideo() {
+const playVideo = async () => {
   const videoStream = await navigator.mediaDevices.getUserMedia({
     video: {
       mandatory: {
@@ -34,34 +35,26 @@ async function playVideo() {
     },
   });
   $interviewCamMain.srcObject = videoStream;
-}
-const getData = async curIndex => {
-  const {
-    data: { interviewList },
-  } = await axios.get('/userInfo');
-  const xmlData = `<speak>${interviewList[curIndex]}</speak>`;
-
-  try {
-    const { data } = await axios.post('https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', xmlData, {
-      headers: {
-        'Content-Type': 'application/xml',
-        Authorization: 'KakaoAK 94d7ab8868125fad5c255d42c430f62a',
-      },
-      responseType: 'arraybuffer',
-    });
-
-    const context = new AudioContext();
-    context.decodeAudioData(data, buffer => {
-      const source = context.createBufferSource();
-      source.buffer = buffer;
-      source.connect(context.destination);
-      source.start(0);
-    });
-  } catch (e) {
-    console.error(e.message);
-  }
 };
-getData(currentInterview - 1);
+
+const interviewResultObj = {
+  category: 'Backend',
+  totalTime: 10,
+  questionList: [
+    {
+      question: '1. 자기소개를 하세요',
+      audio: 'url',
+    },
+  ],
+};
+// // async function
+// const putInterviewResult = async () => {
+//   try {
+//     axios.put('/mockInterview/update', interviewResultObj);
+//   } catch (e) {
+//     console.error(e);
+//   }
+// };
 
 // helper
 const updateTimer = () => {
@@ -70,6 +63,20 @@ const updateTimer = () => {
 };
 
 const displayModal = ({ type, title, describtion, cancle, button }) => {
+  if (type === 'init') {
+    let count = 5;
+    $modalButton.toggleAttribute('disabled', true);
+    console.log($modalTitle.textContent);
+    setTimeout(() => {
+      $modalButton.toggleAttribute('disabled', false);
+      $modalTitle.textContent = `면접 준비가 완료되었습니다!`;
+    }, 5000);
+    const intervalId = setInterval(() => {
+      count--;
+      if (count === 1) clearInterval(intervalId);
+      $modalTitle.textContent = `${count}초 후 버튼이 활성화됩니다.`;
+    }, 1000);
+  }
   document.querySelector('.modal__title').textContent = title;
   document.querySelector('.modal__describtion').textContent = describtion;
   $modalButton.textContent = button;
@@ -85,17 +92,11 @@ const toggleModal = obj => {
 };
 
 // event binding
+
 window.addEventListener('DOMContentLoaded', () => {
   $interviewCountCurrent.textContent = currentInterview;
   $interviewCountTotal.textContent = totalInterview;
-
-  timer.setTime(startTime);
-  timer.start(() => {
-    if (timer.getTime() === 0) toggleModal(modals.timeout);
-    updateTimer();
-  }, 1000);
-
-  playVideo();
+  displayModal(modals.init);
 });
 
 // 다시 시작
@@ -118,9 +119,12 @@ $modalCancle.onclick = () => {
   $modalOuter.classList.toggle('hidden');
 };
 
-$modalButton.onclick = e => {
+// submit 버튼 클릭
+$modalButton.onclick = async e => {
   const { type } = e.currentTarget.dataset;
+  if (type === 'init') playVideo();
   if (type === 'result') {
+    axios.put('/mockInterview/update', interviewResultObj);
     window.location.replace('/report.html');
     return;
   }
@@ -136,5 +140,29 @@ $modalButton.onclick = e => {
     updateTimer();
   }, 1000);
 
-  $modalOuter.classList.toggle('hidden');
+  $modalOuter.classList.toggle('hidden', true);
+
+  try {
+    const xmlData = `<speak>${(await axios.get('/userInfo')).data.interviewList[currentInterview - 1]}</speak>`;
+    console.log(xmlData);
+
+    const { data } = await axios.post('https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', xmlData, {
+      headers: {
+        'Content-Type': 'application/xml',
+        Authorization: 'KakaoAK 94d7ab8868125fad5c255d42c430f62a',
+      },
+      responseType: 'arraybuffer',
+    });
+
+    const context = new AudioContext();
+    context.resume();
+    context.decodeAudioData(data, buffer => {
+      const source = context.createBufferSource();
+      source.buffer = buffer;
+      source.connect(context.destination);
+      source.start(0);
+    });
+  } catch (e) {
+    console.error(e.message);
+  }
 };
