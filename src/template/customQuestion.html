@@ -1,0 +1,37 @@
+<!DOCTYPE html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Document</title>
+  </head>
+  <body>
+    <div class="question-container">
+      <div class="guide">연습하고싶은 질문을 입력하세요.</div>
+      <form class="form">
+        <label for="question-list" class="a11y-hidden">질문 입력칸</label>
+        <textarea
+          class="question-list"
+          name="custom"
+          id="question-list"
+          placeholder="질문은 개행(엔터)으로 구분됩니다."
+          value=""
+        ></textarea>
+        <button type="submit" class="add-button button" disabled>추가하기</button>
+      </form>
+      <nav class="navigation">
+        <a href="./index.html" class="button">홈으로</a>
+        <a href="./setting.html" class="button">면접하러 가기</a>
+      </nav>
+    </div>
+    <div class="modal-outer hidden">
+      <div class="modal">
+        <button class="cancle"><i class="bx bx-x"></i></button>
+        <h2 class="modal__title"></h2>
+        <p class="modal__describtion"></p>
+        <button class="modal__button modal__button--active" type="button">확인</button>
+      </div>
+    </div>
+  </body>
+</html>
