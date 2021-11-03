@@ -23,6 +23,10 @@ const setNews = newNews => {
   render();
 };
 window.addEventListener('DOMContentLoaded', async () => {
-  const { data: news } = await axios.get('./news');
-  setNews(news);
+  try {
+    const { data: news } = await axios.get('./news');
+    setNews(news);
+  } catch (e) {
+    console.log(e.message);
+  }
 });

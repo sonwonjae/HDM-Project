@@ -19,20 +19,25 @@ body {
   }
 
   &__cam {
+    overflow: hidden;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: 0 auto;
     border-radius: 20px;
     width: 100%;
     min-height: 60%;
     max-width: 800px;
     background-color: $white;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
     @include desktop {
       min-height: 70%;
     }
 
     &-main {
-      width: 100%;
-      height: 100%;
+      width: 1280px;
+      height: 720px;
     }
     &-description {
       position: absolute;
@@ -56,7 +61,8 @@ body {
 
     &-icon {
       min-height: 42px;
-      margin-bottom: -20px;
+      margin-top: 10px;
+      margin-bottom: -10px;
       width: 42px;
       height: 42px;
       align-self: flex-end;
@@ -72,6 +78,12 @@ body {
         height: 26px;
         border-radius: 50%;
         background-color: $red;
+      }
+      &--stop {
+        width: 26px;
+        height: 26px;
+        border-radius: 0;
+        background-color: $dark-gray;
       }
     }
   }
@@ -94,6 +106,7 @@ body {
     max-width: 800px;
     width: 100%;
     align-self: center;
+
     & button {
       font-size: 20px;
       font-weight: 700;
@@ -102,8 +115,43 @@ body {
       background-color: $white;
       color: $dark-gray;
       border-radius: 10px;
-      &:first-child {
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      &:first-child:disabled {
+        opacity: 0.6;
       }
     }
   }
+}
+
+.modal {
+  position: relative;
+  &__describtion {
+    width: 220px;
+  }
+  @include desktop {
+    width: 60%;
+    max-width: 600px;
+
+    &__title {
+      font-size: 32px;
+      margin-top: 40px;
+      padding-bottom: 0;
+    }
+    &__describtion {
+      width: 100%;
+    }
+  }
+  & .cancle {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 32px;
+    padding: 0;
+    line-height: 1;
+    background-color: transparent;
+  }
+}
+
+.hidden {
+  display: none;
 }

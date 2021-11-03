@@ -45,54 +45,61 @@
   .container {
     border-radius: 15px;
   }
+}
 
-  .modal-outer {
-    background-color: rgba($color: #000000, $alpha: 0.6);
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
+.modal-outer {
+  background-color: rgba($color: #000000, $alpha: 0.6);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+}
+
+.modal {
+  margin: 0 15px;
+  // max-width: 320px;
+  height: 240px;
+  border-radius: 15px;
+  background-color: $white;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-flow: column;
+  padding: 20px;
+  letter-spacing: 0.05rem;
+
+  &__title {
+    margin-top: 20px;
+    font-size: 24px;
+    font-weight: bold;
   }
 
-  .modal {
-    margin: 0 15px;
-    max-width: 320px;
-    height: 240px;
-    border-radius: 15px;
-    background-color: $white;
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    flex-flow: column;
-    padding: 20px;
-    letter-spacing: 0.05rem;
+  &__describtion {
+    line-height: 1.5;
+    text-align: center;
+  }
 
-    &__title {
-      margin-top: 20px;
-      font-size: 24px;
+  &__button {
+    border: none;
+    padding: 18px 32px;
+    border-radius: 10px;
+
+    &:disabled {
+      // border: 5px solid $light-gray;
+      box-shadow: 0 0 0 5px $light-gray inset;
+      background-color: transparent;
+      color: $light-gray;
+    }
+
+    &--active {
+      background-color: $main;
+      color: $white;
       font-weight: bold;
-    }
-
-    &__describtion {
-      line-height: 1.5;
-      text-align: center;
-    }
-
-    &__button {
-      border: none;
-      padding: 18px 32px;
-      border-radius: 10px;
-
-      &--active {
-        background-color: $main;
-        color: $white;
-        font-weight: bold;
-        font-size: 20px;
-      }
+      font-size: 20px;
     }
   }
 }
