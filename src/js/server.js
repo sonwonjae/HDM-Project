@@ -5,6 +5,7 @@ const app = express();
 
 app.use(express.static('public'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Mock
 const mockInterview = {
@@ -140,6 +141,7 @@ const questionList = {
     '프로젝트를 진행하며 가장 어려웠던 점과 극복했던 방법을 얘기해주세요.',
     'Stack과 Queue의 차이점은 무엇인가요?',
   ],
+  Custom: [],
 };
 
 app.get('/news', async (req, res) => {
@@ -181,6 +183,21 @@ app.get('/questionList', (req, res) => {
     res.send(questionList);
   } catch (e) {
     console.error(e.message);
+  }
+});
+
+app.post('/questionList', (req, res) => {
+  try {
+    const { custom } = req.body;
+    const newCustomList = custom
+      .replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gm, '')
+      .split(/\r\n/g)
+      .map(str => str.trim());
+    questionList.Custom = [questionList.Custom, ...newCustomList];
+    res.send(questionList);
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send('error');
   }
 });
 
