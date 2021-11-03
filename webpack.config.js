@@ -11,6 +11,7 @@ module.exports = {
     setting: './src/js/setting',
     interview: './src/js/interview.js',
     report: './src/js/report.js',
+    customQuestion: './src/js/customQuestion.js',
   },
   // 번들링된 js 파일의 이름(filename)과 저장될 경로(path)를 지정
   // https://webpack.js.org/configuration/output/#outputpath
@@ -38,6 +39,11 @@ module.exports = {
       filename: 'report.html',
       template: 'src/template/report.html',
       chunks: ['app', 'report'],
+    }),
+    new HtmlWebpackPlugin({
+      filename: 'customQuestion.html',
+      template: 'src/template/customQuestion.html',
+      chunks: ['app', 'customQuestion'],
     }),
     new MiniCssExtractPlugin({ filename: 'css/style.css' }),
   ],

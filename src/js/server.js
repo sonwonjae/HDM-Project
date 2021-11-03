@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 
@@ -6,11 +5,14 @@ const app = express();
 
 app.use(express.static('public'));
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
 
 // Mock
 const mockInterview = {
   category: 'Frontend',
   totalTime: 56,
+  selectedTime: 3,
+  progressedTime: [161, 90, 144, 105, 179, 180, 70, 173, 99, 130],
   questionList: [
     {
       question: '1. 자기소개를 하세요',
@@ -139,6 +141,7 @@ const questionList = {
     '프로젝트를 진행하며 가장 어려웠던 점과 극복했던 방법을 얘기해주세요.',
     'Stack과 Queue의 차이점은 무엇인가요?',
   ],
+  Custom: [],
 };
 
 app.get('/news', async (req, res) => {
@@ -163,10 +166,12 @@ app.get('/mockInterview', (req, res) => {
 app.put('/mockInterview/update', (req, res) => {
   try {
     // const newInterviewResult = req.body;
-    const { category, totalTime, questionList } = req.body;
+    const { category, totalTime, questionList, selectedTime, progressedTime } = req.body;
     mockInterview.category = category;
     mockInterview.totalTime = totalTime;
     mockInterview.questionList = questionList;
+    mockInterview.selectedTime = selectedTime;
+    mockInterview.progressedTime = progressedTime;
     res.send(mockInterview);
   } catch (e) {
     console.error(e.message);
@@ -178,6 +183,21 @@ app.get('/questionList', (req, res) => {
     res.send(questionList);
   } catch (e) {
     console.error(e.message);
+  }
+});
+
+app.post('/questionList', (req, res) => {
+  try {
+    const { custom } = req.body;
+    const newCustomList = custom
+      .replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gm, '')
+      .split(/\r\n/g)
+      .map(str => str.trim());
+    questionList.Custom = [questionList.Custom, ...newCustomList];
+    res.send(questionList);
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send('error');
   }
 });
 
