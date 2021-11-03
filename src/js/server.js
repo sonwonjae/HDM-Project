@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 
@@ -10,6 +9,9 @@ app.use(express.json());
 // Mock
 const mockInterview = {
   category: 'Frontend',
+  totalTime: 56,
+  selectedTime: 3,
+  progressedTime: [161, 90, 144, 105, 179, 180, 70, 173, 99, 130],
   questionList: [
     {
       question: '1. 자기소개를 하세요',
@@ -40,7 +42,6 @@ const mockInterview = {
       audio: 'url7',
     },
   ],
-  totalTime: 56,
 };
 let userInfo = {
   interviewList: [],
@@ -160,6 +161,21 @@ app.get('/mockInterview', (req, res) => {
   }
 });
 
+app.put('/mockInterview/update', (req, res) => {
+  try {
+    // const newInterviewResult = req.body;
+    const { category, totalTime, questionList, selectedTime, progressedTime } = req.body;
+    mockInterview.category = category;
+    mockInterview.totalTime = totalTime;
+    mockInterview.questionList = questionList;
+    mockInterview.selectedTime = selectedTime;
+    mockInterview.progressedTime = progressedTime;
+    res.send(mockInterview);
+  } catch (e) {
+    console.error(e.message);
+  }
+});
+
 app.get('/questionList', (req, res) => {
   try {
     res.send(questionList);
@@ -178,8 +194,8 @@ app.get('/userInfo', (req, res) => {
 
 app.put('/userInfo/update', req => {
   const newUserInfo = req.body;
+  console.log(newUserInfo);
   userInfo = newUserInfo;
-  console.log(userInfo);
 });
 
 const PORT = process.env.PORT || 3000;

@@ -22,6 +22,12 @@ h4 {
 .average-time {
   padding-bottom: rem(16px);
 }
+.chart {
+  min-width: 325px;
+  max-height: 400px;
+  padding-bottom: 70px;
+  padding-top: 20px;
+}
 .interview-question {
   height: rem(150px);
   display: flex;

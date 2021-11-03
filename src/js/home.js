@@ -22,7 +22,11 @@ const setNews = newNews => {
   news = newNews;
   render();
 };
-// window.addEventListener('DOMContentLoaded', async () => {
-//   const { data: news } = await axios.get('./news');
-//   setNews(news);
-// });
+window.addEventListener('DOMContentLoaded', async () => {
+  try {
+    const { data: news } = await axios.get('./news');
+    setNews(news);
+  } catch (e) {
+    console.log(e.message);
+  }
+});

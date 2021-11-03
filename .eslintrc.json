@@ -9,7 +9,7 @@
     "es2021": true,
     "node": true
   },
-  "globals": { "_": true, "axios": true },
+  "globals": { "_": true, "axios": true, "Chart": true },
   "plugins": ["import", "html"],
   "extends": ["airbnb-base", "prettier"],
   "rules": {

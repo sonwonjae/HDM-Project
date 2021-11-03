@@ -6,7 +6,7 @@
       <i class="bx bx-log-out log-out"></i>
       <h2 class="title">면접 결과</h2>
       <div class="container report-container">
-        <h2>Frontend 면접</h2>
+        <h2 class="interview-type"></h2>
         <div class="total-time">
           <h3>총 진행 시간</h3>
           <!-- 동적 -->
@@ -18,17 +18,9 @@
           <p class="average-time__min"></p>
         </div>
         <div>
+          <canvas class="chart" width="100px"></canvas>
           <h3>녹음 기록</h3>
           <ul class="record-list">
-            <!-- <div class="interview-question">
-              <li class="record-list__no">
-                <h4>1. 자기 소개 부탁드립니다.</h4>
-                <audio class="record-list__no--audio" controls>
-                  <source src="horse.mp3" type="audio/mpeg" />
-                </audio>
-                <a class="download" href="" download="BannerCreator.png" title="download audio"> </a>
-              </li>
-            </div>-->
           </ul>
         </div>
         <footer>
@@ -37,7 +29,7 @@
           </button>
         </footer>
     </div>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-    <!-- <script src="../js/report.js"></script> -->
   </body>
 </html>

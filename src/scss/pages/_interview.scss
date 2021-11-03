@@ -21,6 +21,9 @@ body {
   &__cam {
     overflow: hidden;
     position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
     margin: 0 auto;
     border-radius: 20px;
     width: 100%;
@@ -33,8 +36,8 @@ body {
     }
 
     &-main {
-      width: 100%;
-      height: 100%;
+      width: 1280px;
+      height: 720px;
     }
     &-description {
       position: absolute;
