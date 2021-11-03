@@ -155,7 +155,7 @@ $modalWrap.onclick = e => {
 };
 
 $modalContainerStart.onclick = () => {
-  window.location.href('/interview.html');
+  window.location.href = '/interview.html';
 };
 
 $checkAudioPermission.onclick = () => {
