@@ -25,7 +25,7 @@ let currentInterview = 1;
 const totalInterview = 5;
 
 // async function
-async function playVideo() {
+const playVideo = async () => {
   const videoStream = await navigator.mediaDevices.getUserMedia({
     video: {
       mandatory: {
@@ -35,7 +35,26 @@ async function playVideo() {
     },
   });
   $interviewCamMain.srcObject = videoStream;
-}
+};
+
+const interviewResultObj = {
+  category: 'Backend',
+  totalTime: 10,
+  questionList: [
+    {
+      question: '1. 자기소개를 하세요',
+      audio: 'url',
+    },
+  ],
+};
+// // async function
+// const putInterviewResult = async () => {
+//   try {
+//     axios.put('/mockInterview/update', interviewResultObj);
+//   } catch (e) {
+//     console.error(e);
+//   }
+// };
 
 // helper
 const updateTimer = () => {
@@ -77,13 +96,6 @@ const toggleModal = obj => {
 window.addEventListener('DOMContentLoaded', () => {
   $interviewCountCurrent.textContent = currentInterview;
   $interviewCountTotal.textContent = totalInterview;
-
-  // timer.setTime(startTime);
-  // timer.start(() => {
-  //   if (timer.getTime() === 0) toggleModal(modals.timeout);
-  //   updateTimer();
-  // }, 1000);
-
   displayModal(modals.init);
 });
 
@@ -112,6 +124,7 @@ $modalButton.onclick = async e => {
   const { type } = e.currentTarget.dataset;
   if (type === 'init') playVideo();
   if (type === 'result') {
+    axios.put('/mockInterview/update', interviewResultObj);
     window.location.replace('/report.html');
     return;
   }
