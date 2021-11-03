@@ -6,6 +6,8 @@ import modals from './modal';
 // import speak from './speak';
 
 // DOM Nodes
+const $title = document.querySelector('.title');
+
 const $interviewCountCurrent = document.querySelector('.interview__count--current');
 const $interviewCountTotal = document.querySelector('.interview__count--total');
 const $interviewCamMain = document.querySelector('.interview__cam-main');
@@ -19,10 +21,11 @@ const $modalButton = document.querySelector('.modal__button');
 const $modalCancle = document.querySelector('.cancle');
 
 // state
-const startTime = 180;
-const stopTime = 20;
+let startTime = 0;
 let currentInterview = 1;
-const totalInterview = 5;
+const recordList = [];
+const stopTime = 20;
+let totalInterview = 0;
 
 // async function
 const playVideo = async () => {
@@ -37,15 +40,58 @@ const playVideo = async () => {
   $interviewCamMain.srcObject = videoStream;
 };
 
+const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+const analyser = audioCtx.createAnalyser();
+
+function makeSound(stream) {
+  const source = audioCtx.createMediaStreamSource(stream);
+
+  source.connect(analyser);
+  analyser.connect(audioCtx.destination);
+}
+
+let mediaRecorder;
+
+const recordAudio = async () => {
+  let chunks = [];
+  const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
+  mediaRecorder = new MediaRecorder(audioStream);
+  console.log(mediaRecorder);
+
+  audioCtx.resume();
+  makeSound(audioStream);
+
+  $modalButton.addEventListener('click', () => {
+    if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+    mediaRecorder.start();
+  });
+
+  mediaRecorder.onstop = async () => {
+    const blob = new Blob(chunks, {
+      type: 'audio/ogg codecs=opus',
+    });
+    chunks = [];
+
+    // let byteArray;
+    //  = new Uint8Array(byteNumbers);
+
+    console.log(blob);
+
+    await blob.arrayBuffer().then(res => {
+      const byteArray = new Uint8Array(res);
+      recordList.push([...byteArray]);
+    });
+  };
+
+  mediaRecorder.ondataavailable = e => {
+    chunks.push(e.data);
+  };
+};
+
 const interviewResultObj = {
   category: 'Backend',
   totalTime: 10,
-  questionList: [
-    {
-      question: '1. 자기소개를 하세요',
-      audio: 'url',
-    },
-  ],
+  questionList: [],
 };
 // // async function
 // const putInterviewResult = async () => {
@@ -64,13 +110,13 @@ const updateTimer = () => {
 
 const displayModal = ({ type, title, describtion, cancle, button }) => {
   if (type === 'init') {
-    let count = 5;
+    let count = 2;
     $modalButton.toggleAttribute('disabled', true);
     console.log($modalTitle.textContent);
     setTimeout(() => {
       $modalButton.toggleAttribute('disabled', false);
       $modalTitle.textContent = `면접 준비가 완료되었습니다!`;
-    }, 5000);
+    }, count * 1000);
     const intervalId = setInterval(() => {
       count--;
       if (count === 1) clearInterval(intervalId);
@@ -93,10 +139,18 @@ const toggleModal = obj => {
 
 // event binding
 
-window.addEventListener('DOMContentLoaded', () => {
+window.addEventListener('DOMContentLoaded', async () => {
+  const {
+    data: { interviewList, interviewCategory, selectedTime },
+  } = await axios.get('/userInfo');
+  startTime = selectedTime;
+  // startTime = selectedTime * 60;
+  totalInterview = interviewList.length;
+  $title.textContent = interviewCategory;
   $interviewCountCurrent.textContent = currentInterview;
-  $interviewCountTotal.textContent = totalInterview;
+  $interviewCountTotal.textContent = interviewList.length;
   displayModal(modals.init);
+  await recordAudio();
 });
 
 // 다시 시작
@@ -112,7 +166,10 @@ $interviewButtonsSubmit.onclick = () => toggleModal(modals.submit);
 $modalCancle.onclick = () => {
   timer.stop();
   timer.start(() => {
-    if (timer.getTime() === 0) toggleModal(modals.timeout);
+    if (timer.getTime() === 0) {
+      if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+      toggleModal(modals.timeout);
+    }
     updateTimer();
   }, 1000);
 
@@ -120,12 +177,20 @@ $modalCancle.onclick = () => {
 };
 
 // submit 버튼 클릭
-$modalButton.onclick = async e => {
+// $modalButton.onclick = async e => {
+$modalButton.addEventListener('click', async e => {
   const { type } = e.currentTarget.dataset;
   if (type === 'init') playVideo();
   if (type === 'result') {
-    axios.put('/mockInterview/update', interviewResultObj);
-    window.location.replace('/report.html');
+    setTimeout(() => {
+      recordList.forEach((e, i) => {
+        interviewResultObj.questionList.push({ question: i + 1, audio: e });
+      });
+      axios.put('/mockInterview/update', interviewResultObj);
+
+      window.location.href = '/report.html';
+    }, 1000);
+
     return;
   }
   if (type === 'submit' || type === 'timeout') {
@@ -136,7 +201,10 @@ $modalButton.onclick = async e => {
   timer.stop();
   timer.setTime(startTime);
   timer.start(() => {
-    if (timer.getTime() === 0) toggleModal(modals.timeout);
+    if (timer.getTime() === 0) {
+      if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
+      toggleModal(modals.timeout);
+    }
     updateTimer();
   }, 1000);
 
@@ -165,4 +233,4 @@ $modalButton.onclick = async e => {
   } catch (e) {
     console.error(e.message);
   }
-};
+});

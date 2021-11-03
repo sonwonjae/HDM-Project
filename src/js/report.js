@@ -21,18 +21,20 @@ const render = () => {
     state.totalTime / state.questionList.length
   )}분`;
   $recordList.innerHTML = state.questionList
-    .map(
-      ({ question, audio }) =>
-        `<div class="interview-question">
+    .map(({ question, audio }) => {
+      console.log(audio);
+      const url = URL.createObjectURL(new Blob([new Uint8Array(audio)]));
+      // const audioURL = URL.createObjectURL(audio);
+      return `<div class="interview-question">
           <li class="record-list__no">
             <h4>${question}</h4>
             <audio class="record-list__no--audio" controls>
-              <source src="${audio}" type="audio/wav" />
+              <source src="${url}" type="audio/wav" />
             </audio>
-            <a class="download" href="" download="${audio}" title="download audio"> </a>
+            <a class="download" href="" download="${url}" title="download audio"> </a>
             </li>
-        </div>`
-    )
+        </div>`;
+    })
     .join('');
 };
 const setState = newState => {
