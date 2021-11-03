@@ -191,8 +191,8 @@ app.get('/userInfo', (req, res) => {
 
 app.put('/userInfo/update', req => {
   const newUserInfo = req.body;
+  console.log(newUserInfo);
   userInfo = newUserInfo;
-  console.log(userInfo);
 });
 
 const PORT = process.env.PORT || 3000;
