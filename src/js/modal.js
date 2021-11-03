@@ -1,4 +1,11 @@
 const modals = {
+  init: {
+    type: 'init',
+    title: '5초 후 버튼이 활성화됩니다.',
+    describtion: '준비가 되셨으면 시작하기 버튼을 눌러주세요.',
+    cancle: false,
+    button: '시작하기',
+  },
   repeat: {
     type: 'repeat',
     title: '다시 시작하시겠어요?',

@@ -10,6 +10,7 @@ app.use(express.json());
 // Mock
 const mockInterview = {
   category: 'Frontend',
+  totalTime: 56,
   questionList: [
     {
       question: '1. 자기소개를 하세요',
@@ -40,7 +41,6 @@ const mockInterview = {
       audio: 'url7',
     },
   ],
-  totalTime: 56,
 };
 let userInfo = {
   interviewList: [],
@@ -154,6 +154,19 @@ app.get('/news', async (req, res) => {
 // GET/mockInterview
 app.get('/mockInterview', (req, res) => {
   try {
+    res.send(mockInterview);
+  } catch (e) {
+    console.error(e.message);
+  }
+});
+
+app.put('/mockInterview/update', (req, res) => {
+  try {
+    // const newInterviewResult = req.body;
+    const { category, totalTime, questionList } = req.body;
+    mockInterview.category = category;
+    mockInterview.totalTime = totalTime;
+    mockInterview.questionList = questionList;
     res.send(mockInterview);
   } catch (e) {
     console.error(e.message);
