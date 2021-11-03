@@ -4,7 +4,7 @@
     <meta charset="UTF-8" />
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link rel="stylesheet" href="../css/index.css" />
+    <link rel="stylesheet" href="/css/index.css" />
     <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet" />
     <title>Document</title>
   </head>
@@ -34,7 +34,7 @@
               />
             </div>
             <div class="interview-setting__time">
-              <h3>질문 별 답변 시간</h3>
+              <h3>질문별 답변 시간</h3>
               <select name="interview-setting__time select">
                 <option>선택하기</option>
                 <option value="1">1분</option>
@@ -49,19 +49,15 @@
           <div class="interview-setting__check">
             <h3>카메라/마이크 권한 허용</h3>
             <span>모의 면접은 카메라와 오디오 기반으로 진행됩니다. 카메라와 마이크 권한을 허용해주세요.</span>
-            <div class="interview-setting__check--btn">
-              <button class="interview-setting__check--btn-camera">
-                <div class="interview-setting__check--btn-icamera"></div>
-              </button>
-              <button class="interview-setting__check--btn-audio">
-                <div class="interview-setting__check--btn-iaudio"></div>
-              </button>
+            <div class="interview__cam">
+              <video class="interview__cam-main" autoplay="false"></video>
+            </div>
+            <div class="interview-setting__audio">
+              <canvas class="interview-setting__audio--visualizer" width="200px" height="60px"></canvas>
             </div>
           </div>
         </div>
         <div class="interview-setting__guide"></div>
-        <!-- <div class="interview-setting__info"><span>선택한 Frontend 면접은 0문항으로 약 0분동안 진행됩니다.</span></div>
-        <div class="interview-setting__comment"><span>면접준비가 되었다면 면접 시작하기 버튼을 눌러주세요.</span></div> -->
         <div class="interview-setting__start"><button disabled>면접 시작하기</button></div>
       </div>
     </div>
@@ -73,7 +69,7 @@
           1.면접이 시작되면 녹음이 자동으로 진행되며, 면접 종료 후 녹음된 내용을 확인하실 수 있습니다.
         </p>
         <p class="modal__container--content">
-          2.면접 시작 후 20초 이내에는 다시 시작 버튼을 눌러 타이머를 다시 시작할 수 있습니다.
+          2.면접 시작 후 20초 이내에는 다시 시작 버튼을 눌러 타이머∫를 다시 시작할 수 있습니다.
         </p>
         <p class="modal__container--content">3. 답변 제출 버튼 클릭 시 다음 질문으로 이동합니다.</p>
         <div cl>
