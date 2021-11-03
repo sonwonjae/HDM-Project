@@ -1,4 +1,6 @@
+import axios from 'axios';
 import timer from './timer';
+import modals from './modal';
 
 // import axios from 'axios';
 // import speak from './speak';
@@ -10,44 +12,76 @@ const $interviewCamMain = document.querySelector('.interview__cam-main');
 const $interviewTimer = document.querySelector('.interview__timer');
 const $interviewButtonsRepeat = document.querySelector('.interview-buttons__repeat');
 const $interviewButtonsSubmit = document.querySelector('.interview-buttons__submit');
-const $repeatModalOuter = document.querySelector('.interview-repeat-modal');
-const $interviewRepeatModalRepeatButton = document.querySelector('.interview-repeat-modal .modal__button');
-const $interviewRepeatModalCancleButton = document.querySelector('.interview-repeat-modal .cancle');
-const $submitModalOuter = document.querySelector('.interview-submit-modal');
-const $interviewSubmitModalSubmitButton = document.querySelector('.interview-submit-modal .modal__button');
-const $interviewSubmitModalCancleButton = document.querySelector('.interview-submit-modal .cancle');
-const $timeoutModalOuter = document.querySelector('.interview-timeout-modal');
-const $interviewTimeoutModalSubmitButton = document.querySelector('.interview-timeout-modal .modal__button');
-const $moveReportModalOuter = document.querySelector('.interview-move-report-modal');
-const $interviewMoveReportModalSubmitButton = document.querySelector('.interview-move-report-modal .modal__button');
+
+const $modalOuter = document.querySelector('.modal-outer');
+const $modalButton = document.querySelector('.modal__button');
+const $modalCancle = document.querySelector('.cancle');
 
 // state
-const startTime = 10;
-const stopTime = 5;
+const startTime = 180;
+const stopTime = 20;
 let currentInterview = 1;
 const totalInterview = 3;
-const sizeObj = {
-  width: 1000,
-  height: 1000,
+
+// async function
+async function playVideo() {
+  const videoStream = await navigator.mediaDevices.getUserMedia({
+    video: {
+      mandatory: {
+        minWidth: 1280,
+        minHeight: 720,
+      },
+    },
+  });
+  $interviewCamMain.srcObject = videoStream;
+}
+const getData = async curIndex => {
+  const {
+    data: { interviewList },
+  } = await axios.get('/userInfo');
+  const xmlData = `<speak>${interviewList[curIndex]}</speak>`;
+
+  try {
+    const { data } = await axios.post('https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', xmlData, {
+      headers: {
+        'Content-Type': 'application/xml',
+        Authorization: 'KakaoAK 94d7ab8868125fad5c255d42c430f62a',
+      },
+      responseType: 'arraybuffer',
+    });
+
+    const context = new AudioContext();
+    context.decodeAudioData(data, buffer => {
+      const source = context.createBufferSource();
+      source.buffer = buffer;
+      source.connect(context.destination);
+      source.start(0);
+    });
+  } catch (e) {
+    console.error(e.message);
+  }
 };
+getData(currentInterview - 1);
 
 // helper
 const updateTimer = () => {
-  if (!$interviewButtonsRepeat.getAttribute('disabled') && startTime - timer.getTime() > stopTime)
-    $interviewButtonsRepeat.setAttribute('disabled', true);
-
-  if (timer.getTime() === 0) {
-    timer.stop();
-    if (currentInterview === totalInterview) {
-      $moveReportModalOuter.classList.toggle('hidden');
-      $interviewMoveReportModalSubmitButton.focus();
-    } else {
-      $timeoutModalOuter.classList.toggle('hidden');
-      $interviewTimeoutModalSubmitButton.focus();
-    }
-  }
-
+  $interviewButtonsRepeat.toggleAttribute('disabled', startTime - timer.getTime() > stopTime);
   $interviewTimer.textContent = timer.updateTime();
+};
+
+const displayModal = ({ type, title, describtion, cancle, button }) => {
+  document.querySelector('.modal__title').textContent = title;
+  document.querySelector('.modal__describtion').textContent = describtion;
+  $modalButton.textContent = button;
+  $modalButton.dataset.type = type;
+  $modalButton.focus();
+
+  $modalCancle.classList.toggle('hidden', !cancle);
+  $modalOuter.classList.toggle('hidden');
+};
+
+const toggleModal = obj => {
+  currentInterview === totalInterview ? displayModal(modals.result) : displayModal(obj);
 };
 
 // event binding
@@ -56,96 +90,51 @@ window.addEventListener('DOMContentLoaded', () => {
   $interviewCountTotal.textContent = totalInterview;
 
   timer.setTime(startTime);
-  timer.start(updateTimer, 1000);
-});
-window.addEventListener('resize', () => {
-  sizeObj.width = $interviewCamMain.clientWidth;
-  sizeObj.height = $interviewCamMain.clientHeight;
-  console.log(sizeObj.width, sizeObj.height);
+  timer.start(() => {
+    if (timer.getTime() === 0) toggleModal(modals.timeout);
+    updateTimer();
+  }, 1000);
+
+  playVideo();
 });
 
-async function vi() {
-  const videoStream = await navigator.mediaDevices.getUserMedia({
-    video: {
-      width: 'auto',
-      height: 'auto',
-      max: 2580,
-    },
-  });
-  $interviewCamMain.srcObject = videoStream;
-}
-vi();
-$interviewCamMain.addEventListener('playing', () => {
-  console.log($interviewCamMain.videoWidth);
-  console.log($interviewCamMain.videoHeight);
-});
 // 다시 시작
 $interviewButtonsRepeat.onclick = () => {
   timer.stop();
-  $repeatModalOuter.classList.toggle('hidden');
-  $interviewRepeatModalRepeatButton.focus();
-};
-
-$interviewRepeatModalRepeatButton.onclick = () => {
-  timer.stop();
-  timer.setTime(startTime);
-  timer.start(updateTimer, 1000);
-
-  $interviewTimer.textContent = timer.updateTime();
-
-  $repeatModalOuter.classList.toggle('hidden');
-};
-
-$interviewRepeatModalCancleButton.onclick = () => {
-  timer.stop();
-  timer.start(updateTimer, 1000);
-  $repeatModalOuter.classList.toggle('hidden');
+  displayModal(modals.repeat);
 };
 
 // 답변 제출
-$interviewButtonsSubmit.onclick = () => {
-  timer.stop();
+$interviewButtonsSubmit.onclick = () => toggleModal(modals.submit);
 
-  if (currentInterview === totalInterview) {
-    $moveReportModalOuter.classList.toggle('hidden');
-    $interviewMoveReportModalSubmitButton.focus();
-  } else {
-    $submitModalOuter.classList.toggle('hidden');
-    $interviewSubmitModalSubmitButton.focus();
+// 취소 버튼 클릭
+$modalCancle.onclick = () => {
+  timer.stop();
+  timer.start(() => {
+    if (timer.getTime() === 0) toggleModal(modals.timeout);
+    updateTimer();
+  }, 1000);
+
+  $modalOuter.classList.toggle('hidden');
+};
+
+$modalButton.onclick = e => {
+  const { type } = e.currentTarget.dataset;
+  if (type === 'result') {
+    window.location.replace('/report.html');
+    return;
   }
-};
-
-// 제출
-$interviewSubmitModalSubmitButton.onclick = () => {
-  currentInterview += 1;
-  $interviewCountCurrent.textContent = currentInterview;
+  if (type === 'submit' || type === 'timeout') {
+    currentInterview += 1;
+    $interviewCountCurrent.textContent = currentInterview;
+  }
 
   timer.stop();
   timer.setTime(startTime);
-  timer.start(updateTimer, 1000);
+  timer.start(() => {
+    if (timer.getTime() === 0) toggleModal(modals.timeout);
+    updateTimer();
+  }, 1000);
 
-  $interviewTimer.textContent = timer.updateTime();
-
-  $submitModalOuter.classList.toggle('hidden');
-};
-
-$interviewSubmitModalCancleButton.onclick = () => {
-  timer.stop();
-  timer.start(updateTimer, 1000);
-  $submitModalOuter.classList.toggle('hidden');
-};
-
-// 시간 종료 제출
-$interviewTimeoutModalSubmitButton.onclick = () => {
-  currentInterview += 1;
-  $interviewCountCurrent.textContent = currentInterview;
-
-  timer.setTime(startTime);
-  timer.start(updateTimer, 1000);
-
-  $timeoutModalOuter.classList.toggle('hidden');
-};
-
-$interviewMoveReportModalSubmitButton.onclick = () => {
-  window.location.replace('/report.html');
+  $modalOuter.classList.toggle('hidden');
 };

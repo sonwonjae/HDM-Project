@@ -19,6 +19,7 @@ const timer = (() => {
       measureTime = time;
     },
     updateTime() {
+      if (measureTime === 0) clearInterval(interval);
       measureTime -= 1;
       return parseTime(measureTime + 1);
     },
