@@ -111,7 +111,7 @@ const render = () => {
       const url = URL.createObjectURL(new Blob([new Uint8Array(audio.split(','))]));
       return `<div class="interview-question">
           <li class="record-list__no">
-            <h4>${question}</h4>
+            <h4 class="question-type">${question}</h4>
             <audio class="record-list__no--audio" controls>
               <source src="${url}" type="audio/wav" />
             </audio>
@@ -131,7 +131,7 @@ const setState = newState => {
 window.addEventListener('DOMContentLoaded', async () => {
   const { data } = await axios.get('/mockInterview', { maxBodyLength: Infinity });
   setState(data);
-  if (state.selectedTime === 0) window.location.replace('/');
+  if (selectedTime === 0) window.location.replace('/');
 });
 window.onscroll = _.throttle(() => {
   window.pageYOffset > SCROLL_DOWN_PAGE_Y ? ($scrollUp.style.display = 'block') : ($scrollUp.style.display = 'none');
@@ -142,11 +142,6 @@ $scrollUp.onclick = () => {
     top: 0,
     behavior: 'smooth',
   });
-};
-document.querySelector('.chart-container').onclick = e => {
-  // if (!e.target.classList.contains('bar') || !e.target.classList.contains('line')) return;
-  console.log(e.target);
-  [$bar, $line].forEach($el => $el.classList.toggle('active'));
 };
 $bar.onclick = e => {
   e.target.style.background = '#605cff';

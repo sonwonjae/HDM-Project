@@ -1,19 +1,29 @@
 <!DOCTYPE html>
 <html lang="ko">
 
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="stylesheet" href="../css/index.css">
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
+  <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
+  <title>한다면</title>
+</head>
+
   <body>
     <div class="main-wrapper">
       <i class="bx bx-log-out log-out"></i>
       <h2 class="title">면접 결과</h2>
       <div class="container report-container">
-        <h2 class="interview-type"></h2>
+        <h2 class="interview-type report-type"></h2>
         <div class="total-time">
-          <h3>총 진행 시간</h3>
+          <h3 class="total-title">총 진행 시간</h3>
           <!-- 동적 -->
           <p class="total-time__min"></p>
         </div>
         <div class="average-time">
-          <h3>문제 당 평균 진행 시간</h3>
+          <h3 class="total-title">문제 당 평균 진행 시간</h3>
           <!-- 동적 -->
           <p class="average-time__min"></p>
         </div>
@@ -24,7 +34,7 @@
           <canvas class="line-chart active" id="line-chart"></canvas>
         </div>
         <div>
-          <h3>녹음 기록</h3>
+          <h3 class="total-title">녹음 기록</h3>
           <ul class="record-list">
           </ul>
         </div>
