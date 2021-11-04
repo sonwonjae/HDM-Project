@@ -5,7 +5,7 @@
     "build:sass": "sass -w src/scss/index.scss:public/css/foo.css",
     "build": "webpack -w",
     "start:frontend": "webpack serve",
-    "start:backend": "nodemon src/js/server"
+    "start:backend": "nodemon src/js/backend/server"
   },
   "devDependencies": {
     "@babel/cli": "^7.15.7",

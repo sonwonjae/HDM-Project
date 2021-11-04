@@ -1,13 +1,13 @@
 const NEWS = '/news';
-const INTERVIEW = '/mockInterview';
+const INTERVIEW = '/interview';
 const QUESTION_LIST = '/questionList';
-const USER_INFO = '/userInfo';
+const USER = '/user';
 
 const router = {
   news: NEWS,
   interview: INTERVIEW,
   questionList: QUESTION_LIST,
-  userInfo: USER_INFO,
+  user: USER,
 };
 
-export default router;
+module.exports = router;

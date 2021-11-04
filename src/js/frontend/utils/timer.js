@@ -23,9 +23,9 @@ const timer = (() => {
       measureTime -= 1;
       return parseTime(measureTime + 1);
     },
-    start(predicate, time) {
-      predicate();
-      interval = setInterval(predicate, time);
+    start(func, time) {
+      func();
+      interval = setInterval(func, time);
     },
     stop() {
       clearInterval(interval);
