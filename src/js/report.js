@@ -131,7 +131,7 @@ const setState = newState => {
 window.addEventListener('DOMContentLoaded', async () => {
   const { data } = await axios.get('/mockInterview', { maxBodyLength: Infinity });
   setState(data);
-  if (selectedTime === 0) window.location.replace('/');
+  if (state.selectedTime === 0) window.location.replace('/');
 });
 window.onscroll = _.throttle(() => {
   window.pageYOffset > SCROLL_DOWN_PAGE_Y ? ($scrollUp.style.display = 'block') : ($scrollUp.style.display = 'none');
