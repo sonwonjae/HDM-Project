@@ -81,9 +81,7 @@ const render = () => {
   )}분`;
   $recordList.innerHTML = state.questionList
     .map(({ question, audio }) => {
-      console.log(audio);
-      const url = URL.createObjectURL(new Blob([new Uint8Array(audio)]));
-      // const audioURL = URL.createObjectURL(audio);
+      const url = URL.createObjectURL(new Blob([new Uint8Array(audio.split(','))]));
       return `<div class="interview-question">
           <li class="record-list__no">
             <h4>${question}</h4>
@@ -104,7 +102,7 @@ const setState = newState => {
 
 // Event Binding----------------
 window.addEventListener('DOMContentLoaded', async () => {
-  const { data } = await axios.get('/mockInterview');
+  const { data } = await axios.get('/mockInterview', { maxBodyLength: Infinity });
   setState(data);
 });
 window.onscroll = _.throttle(() => {
