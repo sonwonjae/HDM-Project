@@ -1,4 +1,4 @@
-const { default: axios } = require('axios');
+import axios from 'axios';
 
 // Constant Number-------------
 const EXECUTE_AFTER_MILLISECOND = 100;
@@ -29,8 +29,7 @@ const createChart = () => {
     datasets: [
       {
         label: '문제당 평균 진행 시간',
-        // 동적 데이터
-        data: state.progressedTime.map(time => time),
+        data: state.progressedTime,
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(255, 159, 64, 0.2)',
@@ -57,7 +56,7 @@ const createChart = () => {
     ],
   };
 
-  const config = {
+  const configBar = {
     type: 'bar',
     data,
     options: {
@@ -93,7 +92,7 @@ const createChart = () => {
     },
   };
 
-  (() => new Chart(document.querySelector('.bar-chart'), config))();
+  (() => new Chart(document.querySelector('.bar-chart'), configBar))();
   (() => new Chart(document.querySelector('.line-chart'), configLine))();
 };
 
@@ -101,24 +100,24 @@ const render = () => {
   createChart();
 
   document.querySelector('.interview-type').innerHTML = `${state.category} 면접`;
-  document.querySelector('.total-time__min').innerHTML = `${parseInt(state.totalTime / 60)}분 ${
+  document.querySelector('.total-time__min').innerHTML = `${Math.floor(state.totalTime / 60)}분 ${
     state.totalTime % 60
   }초`;
-  document.querySelector('.average-time__min').innerHTML = `${parseInt(
+  document.querySelector('.average-time__min').innerHTML = `${Math.floor(
     state.totalTime / state.questionList.length / 60
-  )}분 ${parseInt((state.totalTime / state.questionList.length) % 60)}초`;
+  )}분 ${Math.floor((state.totalTime / state.questionList.length) % 60)}초`;
   $recordList.innerHTML = state.questionList
     .map(({ question, audio }) => {
       const url = URL.createObjectURL(new Blob([new Uint8Array(audio.split(','))]));
       return `<li class="interview-question">
-          <div class="record-list__no">
-            <h4 class="question-type question-ellipsis">${question}</h4>
-            <audio class="record-list__no--audio" controls>
-              <source src="${url}" type="audio/wav" />
-            </audio>
-            <a class="download" href="" download="${url}" title="download audio"> </a>
-            </div>
-        </li>`;
+              <div class="record-list__no">
+                <h4 class="question-type question-ellipsis">${question}</h4>
+                <audio class="record-list__no--audio" controls>
+                  <source src="${url}" type="audio/wav" />
+                </audio>
+                <a class="download" href="" download="${url}" title="download audio"> </a>
+              </div>
+            </li>`;
     })
     .join('');
 };
@@ -134,6 +133,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   setState(data);
   if (state.questionList.length === 0) window.location.replace('/');
 });
+
 window.onscroll = _.throttle(() => {
   window.pageYOffset > SCROLL_DOWN_PAGE_Y ? ($scrollUp.style.display = 'block') : ($scrollUp.style.display = 'none');
 }, EXECUTE_AFTER_MILLISECOND);
@@ -144,6 +144,7 @@ $scrollUp.onclick = () => {
     behavior: 'smooth',
   });
 };
+// 수정
 // $chartContainer.onclick = e => {
 //   if (!e.target.classList.contains('bar') || !e.target.classList.contains('line')) return;;
 //   if(e.target.classList.contains('bar')){
