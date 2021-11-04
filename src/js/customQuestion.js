@@ -6,10 +6,12 @@ const $addButton = document.querySelector('.add-button');
 
 document.querySelector('.form').addEventListener('submit', async e => {
   e.preventDefault();
+
   const questionString = $questionList.value;
   let modalTitle = '';
+
   try {
-    await axios.post('./questionList', { custom: questionString });
+    await axios.post('/questionList', { custom: questionString });
     modalTitle = '입력되었습니다.';
   } catch (e) {
     modalTitle = '입력을 실패했습니다.';
