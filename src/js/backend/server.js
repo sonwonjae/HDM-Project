@@ -1,23 +1,23 @@
 require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
+const router = require('../routes');
 
 const app = express();
 
 app.use(express.static('public'));
-// app.use(express.json());
-// app.use(express.urlencoded({ extended: true }));
 app.use(express.json({ limit: '50mb' }));
 app.use(express.urlencoded({ extended: true, limit: '50mb' }));
+
 // Mock
-const mockInterview = {
+let interview = {
   category: 'Frontend',
   totalTime: 56,
   selectedTime: 3,
-  progressedTime: [161, 90, 144, 105, 179, 180, 70, 173, 99, 130],
+  interviewTimeList: [161, 90, 144, 105, 179, 180, 70, 173, 99, 130],
   questionList: [],
 };
-let userInfo = {
+let user = {
   interviewList: [],
   interviewCategory: '',
   cameraPermission: false,
@@ -26,8 +26,7 @@ let userInfo = {
 };
 
 const questionList = {
-  // 인성 면접 카테고리
-  Personality: [
+  personality: [
     '스트레스를 해소하는 자신만의 방법이 있다면 소개해주세요',
     '팀원과의 의견 충돌이 생기면 어떻게 해결하시나요?',
     '만약 상사와의 의견 충돌이 생긴다면 어떻게 해결하실 건가요?',
@@ -45,8 +44,7 @@ const questionList = {
     '가장 크게 실패한 경험에 대해 말해주세요.',
     '본인이 가장 중요하게 생각하는 가치에 대해 말해주세요.',
   ],
-  // 상황 면접 카테고리
-  Situation: [
+  situation: [
     '비품관리 담당자인데 팀 직원이 공동 물품을 집으로 가져가서 쓴다면 어떻게 하실건가요?',
     '팀프로젝트가 끝나고 팀 전체가 회식을 하고 있습니다. 당신은 팀프로젝트에서 막바지 작업을 해야 하기에 회식 참여가 곤란한 상황입니다. 팀장님께 회식에 불참한다고 어떻게 말씀하시겠습니까?',
     '팀 프로젝트의 최종 보고서를 작성하던 중 프로젝트 수행 과정에서 작은 오류가 있음을 본인만 확인하였습니다. 오류를 수정하게 되면 기한을 맞추지 못하는데 어떻게 하실건가요?',
@@ -63,7 +61,7 @@ const questionList = {
     '당신은 신입사원입니다. 팀장님께서 A 방향에 대한 업무를 지시했습니다. 그런데 회의를 진행하면 할수록 회사에 막대한 피해가 발생할 것 같습니다. 팀장님께 어떻게 말씀하시겠습니까?',
     '업무 환경이나 주제가 바뀌었는데 기존의 계획을 변경하면 안된다고 하는 동료가 있다면 어떻게 하실건가요?',
   ],
-  Frontend: [
+  frontend: [
     '점진적 향상과 우아한 성능 저하에 대해 알고 있는 부분을 설명해주세요.',
     'CORS를 사용하지 않으면 발생할 수 있는 공격에 대해 설명해주세요.',
     '화살표 함수와 일반 함수의 차이를 설명해주세요.',
@@ -98,7 +96,7 @@ const questionList = {
     'this 키워드에 대해 설명해주세요.',
     'Virtual DOM은 무엇인가요?',
   ],
-  Backend: [
+  backend: [
     '세션과 쿠키의 차이점이 무엇인가요?',
     '상속과 구현의 차이점과 특징 및 장단점을 알려주세요.',
     '오버로딩과 오버라이딩의 차이에 대해서 설명해 주세요',
@@ -114,7 +112,7 @@ const questionList = {
     '프로젝트를 진행하며 가장 어려웠던 점과 극복했던 방법을 얘기해주세요.',
     'Stack과 Queue의 차이점은 무엇인가요?',
   ],
-  Custom: [],
+  custom: [],
 };
 
 let news = {
@@ -126,7 +124,7 @@ const isValidNews = () => {
   const halfDay = 1000 * 60 * 60 * 12;
   return new Date() - news.updatedAt < halfDay;
 };
-app.get('/news', async (req, res) => {
+app.get(router.news, async (req, res) => {
   if (news.updatedAt !== 0 && isValidNews()) {
     res.send(news.articles);
     return;
@@ -149,32 +147,25 @@ app.get('/news', async (req, res) => {
     console.error(e.message);
   }
 });
-// GET/mockInterview
-app.get('/mockInterview', (req, res) => {
+
+app.get(router.interview, (req, res) => {
   try {
-    // console.log(mockInterview);
-    res.send(mockInterview);
+    res.send(interview);
   } catch (e) {
     console.error(e.message);
   }
 });
 
-app.put('/mockInterview/update', (req, res) => {
+app.put(router.interview, (req, res) => {
   try {
-    // const newInterviewResult = req.body;
-    const { category, totalTime, questionList, selectedTime, progressedTime } = req.body;
-    mockInterview.category = category;
-    mockInterview.totalTime = totalTime;
-    mockInterview.questionList = questionList;
-    mockInterview.selectedTime = selectedTime;
-    mockInterview.progressedTime = progressedTime;
-    res.send(mockInterview);
+    interview = req.body;
+    res.send(interview);
   } catch (e) {
     console.error(e.message);
   }
 });
 
-app.get('/questionList', (req, res) => {
+app.get(router.questionList, (req, res) => {
   try {
     res.send(questionList);
   } catch (e) {
@@ -182,14 +173,14 @@ app.get('/questionList', (req, res) => {
   }
 });
 
-app.post('/questionList', (req, res) => {
+app.post(router.questionList, (req, res) => {
   try {
     const { custom } = req.body;
     const newCustomList = custom
       .replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gm, '')
       .split(/\r\n/g)
       .map(str => str.trim());
-    questionList.Custom = [questionList.Custom, ...newCustomList];
+    questionList.custom = [questionList.custom, ...newCustomList];
     res.send(questionList);
   } catch (e) {
     console.error(e.message);
@@ -197,17 +188,17 @@ app.post('/questionList', (req, res) => {
   }
 });
 
-app.get('/userInfo', (req, res) => {
+app.get(router.user, (req, res) => {
   try {
-    res.send(userInfo);
+    res.send(user);
   } catch (e) {
     console.error(e.message);
   }
 });
 
-app.put('/userInfo', req => {
-  const newUserInfo = req.body;
-  userInfo = newUserInfo;
+app.put(router.user, req => {
+  const newUser = req.body;
+  user = newUser;
 });
 
 const PORT = process.env.PORT || 3000;

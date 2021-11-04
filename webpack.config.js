@@ -1,17 +1,18 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const router = require('./src/js/routes');
 
 module.exports = {
   // entry file
   // https://webpack.js.org/configuration/entry-context/#entry
   entry: {
-    app: './src/js/app.js',
-    home: './src/js/home.js',
-    setting: './src/js/setting',
-    interview: './src/js/interview.js',
-    report: './src/js/report.js',
-    customQuestion: './src/js/customQuestion.js',
+    app: './src/js/frontend/app.js',
+    home: './src/js/frontend/home.js',
+    setting: './src/js/frontend/setting',
+    interview: './src/js/frontend/interview.js',
+    report: './src/js/frontend/report.js',
+    customQuestion: './src/js/frontend/customQuestion.js',
   },
   // 번들링된 js 파일의 이름(filename)과 저장될 경로(path)를 지정
   // https://webpack.js.org/configuration/output/#outputpath
@@ -90,23 +91,19 @@ module.exports = {
     port: 'auto',
     proxy: [
       {
-        context: '/news',
+        context: router.news,
         target: 'http://localhost:3000/',
       },
       {
-        context: '/mockInterview',
+        context: router.interview,
         target: 'http://localhost:3000/',
       },
       {
-        context: '/questionList',
+        context: router.questionList,
         target: 'http://localhost:3000/',
       },
       {
-        context: '/userInfo/update',
-        target: 'http://localhost:3000/',
-      },
-      {
-        context: '/userInfo',
+        context: router.user,
         target: 'http://localhost:3000/',
       },
     ],

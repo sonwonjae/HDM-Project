@@ -1,6 +1,6 @@
 import axios from 'axios';
-import timer from './timer';
-import modals from './modal';
+import timer from './utils/timer';
+import modals from './utils/modal';
 
 // DOM Nodes
 const $title = document.querySelector('.title');
@@ -10,32 +10,34 @@ const $interviewCountTotal = document.querySelector('.interview__count--total');
 const $interviewCamMain = document.querySelector('.interview__cam-main');
 const $interviewAudioIconState = document.querySelector('.interview__audio-icon--state');
 const $interviewTimer = document.querySelector('.interview__timer');
-const $interviewButtonsRepeat = document.querySelector('.interview-buttons__repeat');
-const $interviewButtonsSubmit = document.querySelector('.interview-buttons__submit');
+const $interviewRepeatButton = document.querySelector('.interview-buttons__repeat');
+const $interviewSubmitButton = document.querySelector('.interview-buttons__submit');
 
 const $modalOuter = document.querySelector('.modal-outer');
 const $modalTitle = document.querySelector('.modal__title');
 const $modalDescription = document.querySelector('.modal__description');
-const $modalButton = document.querySelector('.modal__button');
-const $modalCancle = document.querySelector('.cancle');
+const $modalActionButton = document.querySelector('.modal__button');
+const $modalCancelButton = document.querySelector('.cancel');
 
 // state
-let startTime = 0;
-let currentInterview = 1;
-const recordList = [];
-const stopTime = 20;
-let totalInterview = 0;
+let mediaRecorder;
+let interviewTime = 0;
+let currentInterviewNum = 1;
+let lastInterviewNum = 0;
+const canResetTime = 20;
+
 let questionList = [];
-const interviewResultObj = {
+const recordList = [];
+const interviewResult = {
   category: '',
   totalTime: 0,
   questionList: [],
   selectedTime: 0,
-  progressedTime: [],
+  interviewTimeList: [],
 };
 
 // async function
-const getVideo = async () => {
+const setVideo = async () => {
   const videoStream = await navigator.mediaDevices.getUserMedia({
     video: {
       mandatory: {
@@ -47,9 +49,7 @@ const getVideo = async () => {
   $interviewCamMain.srcObject = videoStream;
 };
 
-let mediaRecorder;
-
-const getAudio = async () => {
+const setAudio = async () => {
   let chunks = [];
   const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
   const audioStream = await navigator.mediaDevices.getUserMedia({ audio: true });
@@ -79,18 +79,15 @@ const getAudio = async () => {
 };
 
 // helper
-const updateTimer = () => {
-  $interviewButtonsRepeat.toggleAttribute('disabled', startTime - timer.getTime() > stopTime);
-  $interviewTimer.textContent = timer.updateTime();
-};
-
-const displayModal = ({ type, title, description, cancle, button }) => {
+const displayModal = ({ type, title, description, cancel, button }) => {
+  // 빼도 되는지 확인
   timer.stop();
+
   if (type === 'init') {
     let count = 3;
-    $modalButton.toggleAttribute('disabled', true);
+    $modalActionButton.toggleAttribute('disabled', true);
     setTimeout(() => {
-      $modalButton.toggleAttribute('disabled', false);
+      $modalActionButton.toggleAttribute('disabled', false);
       $modalTitle.textContent = `면접 준비가 완료되었습니다!`;
     }, count * 1000);
     const intervalId = setInterval(() => {
@@ -99,18 +96,19 @@ const displayModal = ({ type, title, description, cancle, button }) => {
       $modalTitle.textContent = `${count}초 후 버튼이 활성화됩니다.`;
     }, 1000);
   }
+
   $modalTitle.textContent = title;
   $modalDescription.textContent = description;
-  $modalButton.textContent = button;
-  $modalButton.dataset.type = type;
-  $modalButton.focus();
+  $modalActionButton.textContent = button;
+  $modalActionButton.dataset.type = type;
+  $modalActionButton.focus();
 
-  $modalCancle.classList.toggle('hidden', !cancle);
+  $modalCancelButton.classList.toggle('hidden', !cancel);
   $modalOuter.classList.toggle('hidden', false);
 };
 
-const toggleModal = obj => {
-  currentInterview === totalInterview ? displayModal(modals.result) : displayModal(obj);
+const displayResultModal = modaltype => {
+  currentInterviewNum === lastInterviewNum ? displayModal(modals.result) : displayModal(modaltype);
 };
 
 // event binding
@@ -120,18 +118,18 @@ window.addEventListener('DOMContentLoaded', async () => {
   } = await axios.get('/userInfo');
 
   questionList = interviewList;
-  startTime = selectedTime * 60;
-  totalInterview = interviewList.length;
+  interviewTime = selectedTime * 60;
+  lastInterviewNum = interviewList.length;
   $title.textContent = interviewCategory;
-  $interviewCountCurrent.textContent = currentInterview;
+  $interviewCountCurrent.textContent = currentInterviewNum;
   $interviewCountTotal.textContent = interviewList.length;
-  if (totalInterview === 0) window.location.replace('/');
+  if (lastInterviewNum === 0) window.location.replace('/');
   displayModal(modals.init);
-  await getAudio();
+  await setAudio();
 });
 
 // 다시 시작
-$interviewButtonsRepeat.addEventListener('click', () => {
+$interviewRepeatButton.addEventListener('click', () => {
   mediaRecorder.pause();
   timer.stop();
   $interviewAudioIconState.classList.remove('audio-run');
@@ -139,14 +137,15 @@ $interviewButtonsRepeat.addEventListener('click', () => {
 });
 
 // 답변 제출
-$interviewButtonsSubmit.addEventListener('click', () => {
+$interviewSubmitButton.addEventListener('click', () => {
   mediaRecorder.pause();
+  timer.stop();
   $interviewAudioIconState.classList.remove('audio-run');
-  toggleModal(modals.submit);
+  displayResultModal(modals.submit);
 });
 
 // 취소 버튼 클릭
-$modalCancle.addEventListener('click', () => {
+$modalCancelButton.addEventListener('click', () => {
   mediaRecorder.resume();
   $interviewAudioIconState.classList.add('audio-run');
 
@@ -155,57 +154,53 @@ $modalCancle.addEventListener('click', () => {
     if (timer.getTime() <= 0) {
       $interviewAudioIconState.classList.remove('audio-run');
       if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
-      toggleModal(modals.timeout);
+      displayResultModal(modals.timeout);
     }
-    updateTimer();
+    $interviewRepeatButton.toggleAttribute('disabled', interviewTime - timer.getTime() > canResetTime);
+    $interviewTimer.textContent = timer.updateTime();
   }, 1000);
 
   $modalOuter.classList.toggle('hidden');
 });
 
 // 제출 버튼 클릭
-$modalButton.addEventListener('click', async e => {
+$modalActionButton.addEventListener('click', async e => {
   const { type } = e.currentTarget.dataset;
-
-  if (type === 'init') getVideo();
-
-  if (type === 'repeat') mediaRecorder.repeat = 'repeat';
 
   if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
   mediaRecorder.start();
 
-  if (type === 'submit' || type === 'timeout') {
-    currentInterview += 1;
-    $interviewCountCurrent.textContent = currentInterview;
+  if (type === 'init') setVideo();
+  else if (type === 'repeat') mediaRecorder.repeat = 'repeat';
+  else if (type === 'submit' || type === 'timeout') {
+    currentInterviewNum += 1;
+    $interviewCountCurrent.textContent = currentInterviewNum;
   }
 
   try {
     const { data: userInfo } = await axios.get('/userInfo');
-    interviewResultObj.category = userInfo.interviewCategory;
-    interviewResultObj.selectedTime = userInfo.selectedTime * 60;
+    interviewResult.category = userInfo.interviewCategory;
+    interviewResult.selectedTime = userInfo.selectedTime * 60;
 
     if (type !== 'init') {
-      interviewResultObj.progressedTime.push(userInfo.selectedTime * 60 - timer.getTime());
-      interviewResultObj.totalTime += userInfo.selectedTime * 60 - timer.getTime();
+      interviewResult.interviewTimeList.push(userInfo.selectedTime * 60 - timer.getTime());
+      interviewResult.totalTime += userInfo.selectedTime * 60 - timer.getTime();
       if (type === 'repeat') {
-        interviewResultObj.totalTime -= userInfo.selectedTime * 60 - timer.getTime();
-        interviewResultObj.progressedTime.pop();
+        interviewResult.totalTime -= userInfo.selectedTime * 60 - timer.getTime();
+        interviewResult.interviewTimeList.pop();
       }
     }
 
     if (type === 'result') {
       recordList.forEach((e, i) => {
-        interviewResultObj.questionList.push({ question: `${i + 1}. ${questionList[i]}`, audio: e });
+        interviewResult.questionList.push({ question: `${i + 1}. ${questionList[i]}`, audio: e });
       });
 
-      await axios.put('/mockInterview/update', interviewResultObj, { maxBodyLength: Infinity });
+      await axios.put('/mockInterview/update', interviewResult, { maxBodyLength: Infinity });
 
       window.location.replace('/report.html');
-    }
-
-    if (type !== 'result') {
-      const xmlData = `<speak>${questionList[currentInterview - 1]}</speak>`;
-
+    } else {
+      const xmlData = `<speak>${questionList[currentInterviewNum - 1]}</speak>`;
       const { data } = await axios.post('https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', xmlData, {
         headers: {
           'Content-Type': 'application/xml',
@@ -213,8 +208,8 @@ $modalButton.addEventListener('click', async e => {
         },
         responseType: 'arraybuffer',
       });
-
       const context = new AudioContext();
+
       context.resume();
       context.decodeAudioData(data, buffer => {
         const source = context.createBufferSource();
@@ -227,17 +222,18 @@ $modalButton.addEventListener('click', async e => {
     console.error(e.message);
   }
 
-  $interviewAudioIconState.classList.add('audio-run');
   timer.stop();
-  timer.setTime(startTime);
+  timer.setTime(interviewTime);
   timer.start(() => {
     if (timer.getTime() <= 0) {
       $interviewAudioIconState.classList.remove('audio-run');
       if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
-      toggleModal(modals.timeout);
+      displayResultModal(modals.timeout);
     }
-    updateTimer();
+    $interviewRepeatButton.toggleAttribute('disabled', interviewTime - timer.getTime() > canResetTime);
+    $interviewTimer.textContent = timer.updateTime();
   }, 1000);
 
+  $interviewAudioIconState.classList.add('audio-run');
   $modalOuter.classList.toggle('hidden', true);
 });
