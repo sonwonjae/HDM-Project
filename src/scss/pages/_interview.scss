@@ -39,17 +39,6 @@ body {
       width: 1280px;
       height: 720px;
     }
-    &-description {
-      position: absolute;
-      bottom: 0;
-      text-align: center;
-      width: 100%;
-      font-size: 32px;
-      background-color: rgba($color: #000000, $alpha: 0.6);
-      border-radius: 0 0 20px 20px;
-      color: $white;
-      padding: 20px;
-    }
   }
 
   &__audio {
@@ -73,17 +62,18 @@ body {
       justify-content: center;
       box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
 
-      &--active {
-        width: 26px;
-        height: 26px;
-        border-radius: 50%;
-        background-color: $red;
-      }
-      &--stop {
+      &--state {
         width: 26px;
         height: 26px;
         border-radius: 0;
         background-color: $dark-gray;
+
+        &.audio-run {
+          width: 26px;
+          height: 26px;
+          border-radius: 50%;
+          background-color: $red;
+        }
       }
     }
   }

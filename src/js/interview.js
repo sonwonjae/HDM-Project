@@ -8,6 +8,7 @@ const $title = document.querySelector('.title');
 const $interviewCountCurrent = document.querySelector('.interview__count--current');
 const $interviewCountTotal = document.querySelector('.interview__count--total');
 const $interviewCamMain = document.querySelector('.interview__cam-main');
+const $interviewAudioIconState = document.querySelector('.interview__audio-icon--state');
 const $interviewTimer = document.querySelector('.interview__timer');
 const $interviewButtonsRepeat = document.querySelector('.interview-buttons__repeat');
 const $interviewButtonsSubmit = document.querySelector('.interview-buttons__submit');
@@ -132,6 +133,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   $title.textContent = interviewCategory;
   $interviewCountCurrent.textContent = currentInterview;
   $interviewCountTotal.textContent = interviewList.length;
+  if (totalInterview === 0) window.location.replace('/');
   displayModal(modals.init);
   await recordAudio();
 });
@@ -139,19 +141,24 @@ window.addEventListener('DOMContentLoaded', async () => {
 // 다시 시작
 $interviewButtonsRepeat.addEventListener('click', () => {
   timer.stop();
+  $interviewAudioIconState.classList.remove('audio-run');
   displayModal(modals.repeat);
 });
 
 // 답변 제출
 $interviewButtonsSubmit.addEventListener('click', () => {
+  $interviewAudioIconState.classList.remove('audio-run');
   toggleModal(modals.submit);
 });
 
 // 취소 버튼 클릭
 $modalCancle.onclick = () => {
+  $interviewAudioIconState.classList.add('audio-run');
+
   timer.stop();
   timer.start(() => {
     if (timer.getTime() <= 0) {
+      $interviewAudioIconState.classList.remove('audio-run');
       if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
       toggleModal(modals.timeout);
     }
@@ -170,7 +177,6 @@ const interviewResultObj = {
 };
 
 // submit 버튼 클릭
-// $modalButton.onclick = async e => {
 $modalButton.addEventListener('click', async e => {
   const { type } = e.currentTarget.dataset;
 
@@ -227,10 +233,12 @@ $modalButton.addEventListener('click', async e => {
 
     window.location.replace('/report.html');
   }
+  $interviewAudioIconState.classList.add('audio-run');
   timer.stop();
   timer.setTime(startTime);
   timer.start(() => {
     if (timer.getTime() <= 0) {
+      $interviewAudioIconState.classList.remove('audio-run');
       if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
       toggleModal(modals.timeout);
     }
