@@ -11,11 +11,11 @@ const $modalContainerTimer = document.querySelector('.modal-container__counter')
 const $modalContainerStart = document.querySelector('.modal-container__button-start');
 const $container = document.querySelector('.container');
 
-let count = 10;
+let count = 10; // 모달 카운트
 let counterId = '';
 const canvasCtx = canvas.getContext('2d');
 
-// user interview setting state
+// user interview setting state  => 객체로 묶기
 let selectedCategory = '';
 let interviewSettingCnt = 0;
 let selectedTime = 0;
@@ -26,6 +26,7 @@ let micPermission = false;
 const getRandomIdxArr = (arr, cnt) => {
   const randomIndexArray = [];
   for (let i = 0; i < cnt; i++) {
+    // i++ 없애기 else 안쓸 수 있게
     const randomNum = Math.floor(Math.random() * arr.length);
     if (randomIndexArray.indexOf(randomNum) === -1) {
       randomIndexArray.push(randomNum);
@@ -49,7 +50,8 @@ const getInterviewList = async () => {
 
 // set user interview setting info
 const setUser = async () => {
-  const selectedInterviewList = await getInterviewList();
+  // updateUser
+  const selectedInterviewList = await getInterviewList(); // 바로 넣기 혹은 단축 어쩌구로 바꾸기
 
   const user = {
     interviewList: selectedInterviewList,
@@ -62,6 +64,7 @@ const setUser = async () => {
 };
 
 const setModalTimer = () => {
+  // 타이머 원재님꺼루 바꾸기
   $modalContainerTimer.textContent = count;
   if (count >= 1) {
     count -= 1;
@@ -123,7 +126,9 @@ function visualize(stream) {
 }
 
 const checkMicPermission = () => {
+  // await으로 바꿔보기
   if (navigator.mediaDevices.getUserMedia) {
+    // ! 써서 깊이 줄이기
     navigator.mediaDevices
       .getUserMedia({
         audio: true,
@@ -158,7 +163,8 @@ const checkCameraPermission = () => {
     });
 };
 
-const renderInterviewInfo = state => {
+const render = state => {
+  // render로 이름 바꾸고 개행 수정
   $interviewSettingInfo.innerHTML = state
     ? `<div class="interview-setting__info"><span>선택한 ${selectedCategory} 면접은 ${interviewSettingCnt}문항으로 약 ${
         interviewSettingCnt * selectedTime
@@ -167,7 +173,7 @@ const renderInterviewInfo = state => {
     : '';
 };
 
-// 카테고리, 개수, 시간, 카메라, 마이크 허용 시 시작하기 버튼 활성화
+// 카테고리, 개수, 시간, 카메라, 마이크 허용 시 시작하기 버튼 활성화   => isReady 식으로 이름 바꾸기
 const checkStatus = () => selectedCategory && interviewSettingCnt && selectedTime && cameraPermission && micPermission;
 
 window.addEventListener('DOMContentLoaded', checkMicPermission(), checkCameraPermission());
@@ -176,20 +182,20 @@ $container.onchange = () => {
   $startInterview.disabled = !checkStatus();
 };
 
+// 합쳐보기
 $interviewSettingTime.onchange = () => {
   selectedTime = $interviewSettingTime.options[$interviewSettingTime.selectedIndex].value;
-  renderInterviewInfo(checkStatus());
+  render(checkStatus());
 };
 
 $selectInterviewCategory.onchange = () => {
   selectedCategory = $selectInterviewCategory.options[$selectInterviewCategory.selectedIndex].text;
-  renderInterviewInfo(checkStatus());
+  render(checkStatus());
 };
 
 $interviewSettingCnt.onkeyup = e => {
   const regexp = /^[0-9]*$/;
 
-  // 디바운스
   if (!regexp.test(e.target.value)) {
     window.alert('숫자만 입력해주세요.');
     e.target.value = '';
@@ -203,7 +209,7 @@ $interviewSettingCnt.onkeyup = e => {
   }
 
   interviewSettingCnt = e.target.value;
-  renderInterviewInfo(checkStatus());
+  render(checkStatus());
 };
 
 $startInterview.onclick = () => {
