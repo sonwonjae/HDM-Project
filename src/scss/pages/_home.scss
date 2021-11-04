@@ -14,18 +14,17 @@
       line-height: 1.3;
       font-weight: 700;
     }
-
     .interview-link {
-      padding: 28px;
-      max-width: 406px;
+      display: block;
       border-radius: 15px;
       background-color: $white;
       color: $dark-gray;
-
+      white-space: nowrap;
+      text-align: center;
       &__title {
         font-weight: 700;
         font-size: 20px;
-        margin-bottom: 40px;
+        // margin-bottom: 40px;
       }
       &__description {
         line-height: 1.3;
@@ -34,8 +33,8 @@
   }
 
   @include mobile {
-    padding: 35px 15px;
-
+    // padding: 35px 15px;
+    padding-bottom: 15px;
     &__logo {
       font-size: 28px;
       margin-bottom: 45px;
@@ -45,6 +44,19 @@
       &--slogan {
         margin-bottom: 45px;
         font-size: 24px;
+      }
+      .home-nav {
+        display: flex;
+        .interview-link {
+          padding: 20px;
+          width: 140px;
+          &:first-child {
+            margin-right: 20px;
+          }
+          &__title {
+            font-size: 14px;
+          }
+        }
       }
     }
   }
@@ -62,6 +74,16 @@
       align-items: center;
       &--slogan {
         font-size: 36px;
+      }
+      .home-nav {
+        display: flex;
+        .interview-link {
+          padding: 30px;
+        }
+        .interview-link:first-child {
+          width: 200px;
+          margin-right: 20px;
+        }
       }
     }
   }

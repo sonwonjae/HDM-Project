@@ -1,7 +1,9 @@
 import axios from 'axios';
 
 let news = [];
+
 const $newsList = document.querySelector('.news__list');
+
 const render = () => {
   $newsList.innerHTML = news
     .map(
@@ -18,13 +20,15 @@ const render = () => {
     )
     .join('');
 };
+
 const setNews = newNews => {
   news = newNews;
   render();
 };
+
 window.addEventListener('DOMContentLoaded', async () => {
   try {
-    const { data: news } = await axios.get('./news');
+    const { data: news } = await axios.get('/news');
     setNews(news);
   } catch (e) {
     console.log(e.message);
