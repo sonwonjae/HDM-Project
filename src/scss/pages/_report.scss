@@ -1,15 +1,42 @@
 @use './../base' as *;
 .main-wrapper .report-container {
-  padding: rem(20px);
+  padding: rem(50px);
   height: auto;
+  border-radius: 20px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+
+  @include mobile {
+    padding: 20px;
+    border-radius: 5px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
 }
 .report-type {
-  font-size: rem(24px);
-  padding-bottom: rem(20px);
+  font-size: 36px;
+  font-weight: 700;
+  padding-bottom: rem(35px);
+
+  @include mobile {
+    font-size: 24px;
+    padding-bottom: 40px;
+  }
 }
 .total-title {
-  font-size: rem(20px);
-  padding-bottom: rem(20px);
+  font-size: 20px;
+  font-weight: 700;
+  padding-bottom: rem(25px);
+
+  @include mobile {
+    font-size: 16px;
+    padding-bottom: 15px;
+  }
+  &__min {
+    @include mobile {
+      font-size: 14px;
+    }
+  }
 }
 .question-type {
   text-align: left;
@@ -17,7 +44,7 @@
   padding-right: rem(16px);
 }
 .total-time {
-  padding-bottom: rem(16px);
+  padding-bottom: rem(25px);
 }
 .average-time {
   padding-bottom: rem(16px);
@@ -25,21 +52,21 @@
 .chart-container {
   position: relative;
 }
-.bar {
+.bar,
+.line {
   font-size: rem(12px);
   color: $white;
   position: absolute;
-  background-color: $light-gray;
   top: 0;
+  border: none;
+  border-radius: 7px;
+}
+.bar {
+  background-color: $light-gray;
   right: 0;
 }
 .line {
-  font-size: rem(12px);
-  size: rem(14px);
-  color: $white;
-  position: absolute;
   background-color: $main;
-  top: 0;
   right: rem(65px);
 }
 .bar-chart,
@@ -116,4 +143,5 @@
   background-color: transparent;
   border: none;
   left: 50%;
+  display: none;
 }

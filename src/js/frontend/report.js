@@ -1,19 +1,16 @@
 import axios from 'axios';
 
-// Constant Number-------------
 const THROTTLE_DELAY = 100;
 const SCROLL_DOWN_PAGE_Y = 300;
 
-// state
 let state = {
   category: '',
   questionList: [],
   totalTime: 0,
   selectedTime: 0,
-  interviewTimeList: [], // 변수명 바꾸기
+  interviewTimeList: [],
 };
 
-// DOM Nodes--------------------
 const $scrollUp = document.querySelector('.scroll-up');
 const $recordList = document.querySelector('.record-list');
 const $displayBarBtn = document.querySelector('.bar');
@@ -21,7 +18,6 @@ const $displayLineBtn = document.querySelector('.line');
 const $barChart = document.querySelector('.bar-chart');
 const $lineChart = document.querySelector('.line-chart');
 
-// Functions --------------------
 const createChart = () => {
   const labels = Array.from({ length: state.interviewTimeList.length }).map((_, i) => `${i + 1}번`);
   const data = {
@@ -127,9 +123,8 @@ const setState = newState => {
   render();
 };
 
-// Event Binding----------------
 window.addEventListener('DOMContentLoaded', async () => {
-  const { data } = await axios.get('/mockInterview', { maxBodyLength: Infinity });
+  const { data } = await axios.get('/interview', { maxBodyLength: Infinity });
   setState(data);
   if (state.questionList.length === 0) window.location.replace('/');
 });
@@ -144,7 +139,7 @@ $scrollUp.onclick = () => {
     behavior: 'smooth',
   });
 };
-// [$displayBarBtn, $displayLineBtn];
+
 $displayBarBtn.onclick = e => {
   e.target.style.background = '#605cff';
   $displayLineBtn.style.background = '#c9c9c9';
