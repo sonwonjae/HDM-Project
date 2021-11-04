@@ -20,6 +20,7 @@ const $bar = document.querySelector('.bar');
 const $line = document.querySelector('.line');
 const $barChart = document.querySelector('.bar-chart');
 const $lineChart = document.querySelector('.line-chart');
+const $chartContainer = document.querySelector('.chart-container');
 // Functions --------------------
 const createChart = () => {
   const labels = Array.from({ length: state.progressedTime.length }).map((_, i) => `${i + 1}번`);
@@ -105,19 +106,19 @@ const render = () => {
   }초`;
   document.querySelector('.average-time__min').innerHTML = `${parseInt(
     state.totalTime / state.questionList.length / 60
-  )}분 ${(state.totalTime / state.questionList.length) % 60}초`;
+  )}분 ${parseInt((state.totalTime / state.questionList.length) % 60)}초`;
   $recordList.innerHTML = state.questionList
     .map(({ question, audio }) => {
       const url = URL.createObjectURL(new Blob([new Uint8Array(audio.split(','))]));
-      return `<div class="interview-question">
-          <li class="record-list__no">
-            <h4 class="question-type">${question}</h4>
+      return `<li class="interview-question">
+          <div class="record-list__no">
+            <h4 class="question-type question-ellipsis">${question}</h4>
             <audio class="record-list__no--audio" controls>
               <source src="${url}" type="audio/wav" />
             </audio>
             <a class="download" href="" download="${url}" title="download audio"> </a>
-            </li>
-        </div>`;
+            </div>
+        </li>`;
     })
     .join('');
 };
@@ -129,9 +130,9 @@ const setState = newState => {
 
 // Event Binding----------------
 window.addEventListener('DOMContentLoaded', async () => {
-  if (state.progressedTime.length === 0) window.location.replace('/');
   const { data } = await axios.get('/mockInterview', { maxBodyLength: Infinity });
   setState(data);
+  if (state.questionList.length === 0) window.location.replace('/');
 });
 window.onscroll = _.throttle(() => {
   window.pageYOffset > SCROLL_DOWN_PAGE_Y ? ($scrollUp.style.display = 'block') : ($scrollUp.style.display = 'none');
@@ -143,6 +144,12 @@ $scrollUp.onclick = () => {
     behavior: 'smooth',
   });
 };
+// $chartContainer.onclick = e => {
+//   if (!e.target.classList.contains('bar') || !e.target.classList.contains('line')) return;;
+//   if(e.target.classList.contains('bar')){
+
+//   }
+// };
 $bar.onclick = e => {
   e.target.style.background = '#605cff';
   $line.style.background = '#c9c9c9';
