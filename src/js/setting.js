@@ -1,23 +1,24 @@
 import axios from 'axios';
 
-const $selectInterviewCategory = document.querySelector('.interview-setting__kind select'); // 면접 카테고리
-const $interviewSettingCnt = document.querySelector('.interview-setting__cnt--input'); // 면접 질문 개수
-const $startInterview = document.querySelector('.interview-setting__start > button'); // 면접 시작 버튼
-const $interviewSettingTime = document.querySelector('.interview-setting__time select'); // 면접 시간 선택
-const $checkAudioPermission = document.querySelector('.interview-setting__check--btn-audio');
-const $checkCameraPermission = document.querySelector('.interview-setting__check--btn-camera');
-const $interviewSettingInfo = document.querySelector('.interview-setting__guide');
+const $selectInterviewCategory = document.querySelector('.interview-set__info--category-title'); // 면접 카테고리
+const $interviewSettingCnt = document.querySelector('.interview-set__info--count-input'); // 면접 질문 개수
+const $startInterview = document.querySelector('.interview-start'); // 면접 시작 버튼
+const $interviewSettingTime = document.querySelector('.interview-set__info--time-select'); // 면접 시간 선택
+const $interviewSettingInfo = document.querySelector('.interview-guide');
+const canvas = document.querySelector('.permission-check__audio--visualization');
 const $modalWrap = document.querySelector('.modal-wrap');
-const $modalContainerTimer = document.querySelector('.modal__container--timer');
-const $modalContainerStart = document.querySelector('.modal__container--start');
+const $modalContainerTimer = document.querySelector('.modal-container__counter');
+const $modalContainerStart = document.querySelector('.modal-container__button-start');
 const $container = document.querySelector('.container');
 
-let count = 1;
+let count = 10;
+let counterId = '';
+const canvasCtx = canvas.getContext('2d');
 
 // user interview setting state
-let selectedTime = 0;
 let selectedCategory = '';
 let interviewSettingCnt = 0;
+let selectedTime = 0;
 let cameraPermission = false;
 let micPermission = false;
 
@@ -57,7 +58,7 @@ const setUser = async () => {
     micPermission: false,
     selectedTime,
   };
-  axios.put('/userInfo/update', user);
+  axios.put('/userInfo', user);
 };
 
 const setModalTimer = () => {
@@ -69,38 +70,98 @@ const setModalTimer = () => {
   }
 };
 
+// audio visualization
+function visualize(stream) {
+  const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+
+  const source = audioCtx.createMediaStreamSource(stream);
+
+  const analyser = audioCtx.createAnalyser();
+  analyser.fftSize = 2048;
+  const bufferLength = analyser.frequencyBinCount;
+  const dataArray = new Uint8Array(bufferLength);
+
+  source.connect(analyser);
+
+  function draw() {
+    const WIDTH = canvas.width;
+    const HEIGHT = canvas.height;
+
+    requestAnimationFrame(draw);
+
+    analyser.getByteTimeDomainData(dataArray);
+
+    canvasCtx.fillStyle = 'rgb(255,255,255)';
+    canvasCtx.fillRect(0, 0, WIDTH, HEIGHT);
+
+    canvasCtx.lineWidth = 2;
+    canvasCtx.strokeStyle = '#605CFF';
+
+    canvasCtx.beginPath();
+
+    const sliceWidth = (WIDTH * 2.0) / bufferLength;
+    let x = 0;
+
+    for (let i = 0; i < bufferLength; i++) {
+      const v = dataArray[i] / 128.0;
+      const y = (v * HEIGHT) / 4;
+
+      if (i === 0) {
+        canvasCtx.moveTo(x, y);
+      } else {
+        canvasCtx.lineTo(x, y);
+      }
+
+      x += sliceWidth;
+    }
+
+    canvasCtx.lineTo(canvas.width, canvas.height / 2);
+    canvasCtx.stroke();
+  }
+
+  draw();
+}
+
 const checkMicPermission = () => {
   if (navigator.mediaDevices.getUserMedia) {
     navigator.mediaDevices
       .getUserMedia({
         audio: true,
       })
-      .then((micPermission = true))
+      .then(stream => {
+        visualize(stream);
+        micPermission = true;
+      })
       .catch(error => {
-        console.log('마이크 권한 허용이 정상적으로 완료되지 않았습니다.');
+        micPermission = false;
+        console.log(error.name + ': ' + error.message);
       });
   }
 };
 
 const checkCameraPermission = () => {
-  if (navigator.mediaDevices.getUserMedia) {
-    navigator.mediaDevices
-      .getUserMedia({
-        video: {
-          facingMode: 'user',
-        },
-      })
-      .then((cameraPermission = true))
-      .catch(error => {
-        console.log('카메라 권한 허용이 정상적으로 완료되지 않았습니다.');
-      });
-  }
+  const constraints = {
+    video: {
+      facingMode: 'user',
+    },
+  };
+  navigator.mediaDevices
+    .getUserMedia(constraints)
+    .then(mediaStream => {
+      const video = document.querySelector('video');
+      video.srcObject = mediaStream;
+      cameraPermission = true;
+    })
+    .catch(err => {
+      cameraPermission = false;
+      console.log(err.name + ': ' + err.message);
+    });
 };
 
 const renderInterviewInfo = state => {
   $interviewSettingInfo.innerHTML = state
     ? `<div class="interview-setting__info"><span>선택한 ${selectedCategory} 면접은 ${interviewSettingCnt}문항으로 약 ${
-        interviewSettingCnt * interviewSettingCnt
+        interviewSettingCnt * selectedTime
       }분동안 진행됩니다.</span></div>
   <div class="interview-setting__comment"><span>면접준비가 되었다면 면접 시작하기 버튼을 눌러주세요.</span></div>`
     : '';
@@ -109,7 +170,9 @@ const renderInterviewInfo = state => {
 // 카테고리, 개수, 시간, 카메라, 마이크 허용 시 시작하기 버튼 활성화
 const checkStatus = () => selectedCategory && interviewSettingCnt && selectedTime && cameraPermission && micPermission;
 
-$container.onclick = () => {
+window.addEventListener('DOMContentLoaded', checkMicPermission(), checkCameraPermission());
+
+$container.onchange = () => {
   $startInterview.disabled = !checkStatus();
 };
 
@@ -146,24 +209,15 @@ $interviewSettingCnt.onkeyup = e => {
 $startInterview.onclick = () => {
   setUser();
   $modalWrap.classList.add('active');
-  setInterval(setModalTimer, 1000);
+  counterId = setInterval(setModalTimer, 1000);
 };
 
 $modalWrap.onclick = e => {
   if (!e.target.classList.contains('close')) return;
   $modalWrap.classList.remove('active');
+  clearInterval(counterId);
 };
 
 $modalContainerStart.onclick = () => {
   window.location.href = '/interview.html';
-};
-
-$checkAudioPermission.onclick = () => {
-  checkMicPermission();
-  renderInterviewInfo(checkStatus());
-};
-
-$checkCameraPermission.onclick = () => {
-  checkCameraPermission();
-  renderInterviewInfo(checkStatus());
 };

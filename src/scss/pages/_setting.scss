@@ -1,119 +1,83 @@
 @forward './common';
 @use '../base' as *;
 
-.container {
-  padding: 28px;
-  overflow-y: scroll;
+/*=== 면접 정보 설정 ===*/
+.interview-set {
+  display: flex;
+  flex-direction: row;
+
+  &__info {
+    width: 50%;
+
+    &--category {
+      &-select {
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        background-color: #f6f6f6;
+        border-radius: 3px;
+        border: none;
+      }
+    }
+
+    &--count {
+      &-input {
+        border-radius: 3px;
+        background-color: #f6f6f6;
+        border: none;
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+      }
+    }
+
+    &--time {
+      &-select {
+        width: 100%;
+        height: 40px;
+        padding: 10px;
+        background-color: #f6f6f6;
+        border-radius: 3px;
+        border: none;
+      }
+    }
+  }
 }
 
-input {
-  border-radius: 3px;
-  background-color: #f6f6f6;
-  border: none;
-  width: 100%;
-  height: 40px;
-  padding: 10px;
-}
-
-.interview {
+/*=== 카메라, 오디오 권한 환경 설정 ====*/
+.permission-check {
+  width: 50%;
   display: flex;
   flex-direction: column;
+  align-items: center;
+
+  &__video {
+    width: 300px;
+
+    &--cam {
+      width: 300px;
+    }
+  }
+
+  &__audio {
+    // width: 300px;
+    height: 100px;
+
+    &--visualization {
+      // width: 300px;
+    }
+  }
 }
 
-button {
-  border-radius: 10px;
-  border: none;
-}
-
-h3 {
-  margin-bottom: 8px;
-}
-
-.interview-setting {
-  @include desktop {
-    width: 60%;
-  }
-
-  &__all {
-    @include desktop {
-      display: flex;
-      justify-content: space-around;
-    }
-  }
-
-  &__kind,
-  &__cnt,
-  &__time {
-    display: flex;
-    flex-direction: column;
-    margin-bottom: 22px;
-  }
-
-  &__kind select,
-  &__time select {
-    width: 100%;
-    height: 40px;
-    padding: 10px;
-    background-color: #f6f6f6;
-    border-radius: 3px;
-    border: none;
-  }
-
-  &__check {
-    @include desktop {
-      width: 40%;
-      margin-left: 30px;
-    }
-    display: flex;
-    flex-direction: column;
-
-    span {
-      margin-top: 10px;
-      margin-bottom: 10px;
-    }
-
-    &--btn {
-      display: flex;
-      flex-direction: row;
-      margin-top: 10px;
-      align-self: center;
-
-      &-icamera {
-        width: 46px;
-        height: 41px;
-        background-image: url('/src/img/camera.png');
-        background-size: cover;
-        display: inline-block;
-      }
-
-      &-iaudio {
-        width: 40px;
-        height: 51px;
-        background-image: url('/src/img/audio.png');
-        background-size: cover;
-        display: inline-block;
-      }
-
-      &-camera,
-      &-audio {
-        background-color: $main;
-        min-width: 90px;
-        height: 100px;
-      }
-
-      &-camera {
-        margin-right: 30px;
-      }
-    }
-  }
-
+/*=== 면접 가이드 & 시작하기 ===*/
+.interview {
   &__start {
     display: flex;
-    justify-content: center;
     margin-top: 37px;
     margin-bottom: 17px;
+    align-items: center;
 
-    & button {
+    &__button {
       width: 70%;
       height: 58px;
       background-color: $main;
@@ -135,18 +99,9 @@ h3 {
       }
     }
   }
-
-  &__info {
-    margin-top: 54px;
-    text-align: center;
-  }
-
-  &__comment {
-    margin-top: 22px;
-    text-align: center;
-  }
 }
 
+/*=== 모달 ===*/
 .modal-wrap {
   display: none;
   position: fixed;
@@ -163,7 +118,11 @@ h3 {
   }
 }
 
-.modal__container {
+.modal-container {
+  @include desktop {
+    top: 20%;
+    padding: 35px 85px;
+  }
   position: absolute;
   display: flex;
   flex-direction: column;
@@ -179,33 +138,28 @@ h3 {
   box-shadow: 3px 3px 8px 0 rgba(0, 0, 0, 0.5);
   justify-content: center;
 
-  @include desktop {
-    top: 20%;
-    padding: 35px 85px;
-  }
-
-  &--timer {
+  &__counter {
     font-size: 48px;
     font-weight: 600;
     color: $dark-gray;
     text-align: center;
   }
 
-  &--title {
+  &__title {
     margin-top: 40px;
     font-size: 16px;
     font-weight: 500;
     color: $dark-gray;
   }
 
-  &--content {
+  &__content {
     line-height: 1.5;
     font-size: 16px;
     color: $dark-gray;
     margin-bottom: 10px;
   }
 
-  &--guide {
+  &__guide {
     font-size: 16px;
     font-weight: 400;
     color: $dark-gray;
@@ -214,7 +168,7 @@ h3 {
     margin-top: 40px;
   }
 
-  &--close {
+  &__button--close {
     position: absolute;
     top: 20px;
     right: 20px;
@@ -225,7 +179,7 @@ h3 {
     font-size: 18px;
   }
 
-  &--start {
+  &__button--start {
     border: none;
     padding: 18px 32px;
     border-radius: 10px;
