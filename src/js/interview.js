@@ -23,6 +23,7 @@ let currentInterview = 1;
 const recordList = [];
 const stopTime = 20;
 let totalInterview = 0;
+const questionList = [];
 
 // async function
 const playVideo = async () => {
@@ -71,6 +72,7 @@ const recordAudio = async () => {
     await blob.arrayBuffer().then(res => {
       const byteArray = new Uint8Array(res);
 
+      questionList.push();
       recordList.push([...byteArray].join(','));
       if (e.target.repeat) {
         recordList.pop();
@@ -192,6 +194,7 @@ $modalButton.addEventListener('click', async e => {
     }
 
     if (type !== 'result') {
+      questionList.push(`${currentInterview}. ${userInfo.interviewList[currentInterview - 1]}`);
       const xmlData = `<speak>${userInfo.interviewList[currentInterview - 1]}</speak>`;
 
       const { data } = await axios.post('https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', xmlData, {
@@ -217,7 +220,7 @@ $modalButton.addEventListener('click', async e => {
 
   if (type === 'result') {
     recordList.forEach((e, i) => {
-      interviewResultObj.questionList.push({ question: i + 1, audio: e });
+      interviewResultObj.questionList.push({ question: questionList[i], audio: e });
     });
 
     await axios.put('/mockInterview/update', interviewResultObj, { maxBodyLength: Infinity });
