@@ -189,7 +189,7 @@ app.get('/userInfo', (req, res) => {
   }
 });
 
-app.put('/userInfo/update', req => {
+app.put('/userInfo', req => {
   const newUserInfo = req.body;
   console.log(newUserInfo);
   userInfo = newUserInfo;
