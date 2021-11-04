@@ -1,7 +1,7 @@
 import axios from 'axios';
 
 // Constant Number-------------
-const EXECUTE_AFTER_MILLISECOND = 100;
+const THROTTLE_DELAY = 100;
 const SCROLL_DOWN_PAGE_Y = 300;
 
 // state
@@ -10,26 +10,26 @@ let state = {
   questionList: [],
   totalTime: 0,
   selectedTime: 0,
-  progressedTime: [],
+  interviewTimeList: [], // 변수명 바꾸기
 };
 
 // DOM Nodes--------------------
 const $scrollUp = document.querySelector('.scroll-up');
 const $recordList = document.querySelector('.record-list');
-const $bar = document.querySelector('.bar');
-const $line = document.querySelector('.line');
+const $displayBarBtn = document.querySelector('.bar');
+const $displayLineBtn = document.querySelector('.line');
 const $barChart = document.querySelector('.bar-chart');
 const $lineChart = document.querySelector('.line-chart');
-const $chartContainer = document.querySelector('.chart-container');
+
 // Functions --------------------
 const createChart = () => {
-  const labels = Array.from({ length: state.progressedTime.length }).map((_, i) => `${i + 1}번`);
+  const labels = Array.from({ length: state.interviewTimeList.length }).map((_, i) => `${i + 1}번`);
   const data = {
     labels,
     datasets: [
       {
-        label: '문제당 평균 진행 시간',
-        data: state.progressedTime,
+        label: '질문별 평균 답변 시간',
+        data: state.interviewTimeList,
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(255, 159, 64, 0.2)',
@@ -100,24 +100,24 @@ const render = () => {
   createChart();
 
   document.querySelector('.interview-type').innerHTML = `${state.category} 면접`;
-  document.querySelector('.total-time__min').innerHTML = `${Math.floor(state.totalTime / 60)}분 ${
-    state.totalTime % 60
-  }초`;
-  document.querySelector('.average-time__min').innerHTML = `${Math.floor(
-    state.totalTime / state.questionList.length / 60
-  )}분 ${Math.floor((state.totalTime / state.questionList.length) % 60)}초`;
+  document.querySelector('.total-time__min').innerHTML = `
+      ${Math.floor(state.totalTime / 60)}분 ${state.totalTime % 60}초`;
+  document.querySelector('.average-time__min').innerHTML = `
+        ${Math.floor(state.totalTime / state.questionList.length / 60)}분 
+        ${Math.floor((state.totalTime / state.questionList.length) % 60)}초`;
   $recordList.innerHTML = state.questionList
     .map(({ question, audio }) => {
       const url = URL.createObjectURL(new Blob([new Uint8Array(audio.split(','))]));
-      return `<li class="interview-question">
-              <div class="record-list__no">
-                <h4 class="question-type question-ellipsis">${question}</h4>
-                <audio class="record-list__no--audio" controls>
-                  <source src="${url}" type="audio/wav" />
-                </audio>
-                <a class="download" href="" download="${url}" title="download audio"> </a>
-              </div>
-            </li>`;
+      return `
+          <li class="interview-question">
+            <div class="record-list__no">
+              <h4 class="question-type question-ellipsis">${question}</h4>
+              <audio class="record-list__no--audio" controls>
+                <source src="${url}" type="audio/wav" />
+              </audio>
+              <a class="download" href="" download="${url}" title="download audio"> </a>
+            </div>
+          </li>`;
     })
     .join('');
 };
@@ -136,7 +136,7 @@ window.addEventListener('DOMContentLoaded', async () => {
 
 window.onscroll = _.throttle(() => {
   window.pageYOffset > SCROLL_DOWN_PAGE_Y ? ($scrollUp.style.display = 'block') : ($scrollUp.style.display = 'none');
-}, EXECUTE_AFTER_MILLISECOND);
+}, THROTTLE_DELAY);
 
 $scrollUp.onclick = () => {
   window.scroll({
@@ -144,22 +144,16 @@ $scrollUp.onclick = () => {
     behavior: 'smooth',
   });
 };
-// 수정
-// $chartContainer.onclick = e => {
-//   if (!e.target.classList.contains('bar') || !e.target.classList.contains('line')) return;;
-//   if(e.target.classList.contains('bar')){
-
-//   }
-// };
-$bar.onclick = e => {
+// [$displayBarBtn, $displayLineBtn];
+$displayBarBtn.onclick = e => {
   e.target.style.background = '#605cff';
-  $line.style.background = '#c9c9c9';
+  $displayLineBtn.style.background = '#c9c9c9';
   $barChart.classList.add('active');
   $lineChart.classList.remove('active');
 };
-$line.onclick = e => {
+$displayLineBtn.onclick = e => {
   e.target.style.background = '#605cff';
-  $bar.style.background = '#c9c9c9';
+  $displayBarBtn.style.background = '#c9c9c9';
   $lineChart.classList.add('active');
   $barChart.classList.remove('active');
 };
