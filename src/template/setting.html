@@ -5,34 +5,34 @@
   <meta charset="UTF-8" />
   <meta http-equiv="X-UA-Compatible" content="IE=edge" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <link rel="stylesheet" href="../css/index.css" />
+  <link rel="stylesheet" href="/css/index.css" />
   <link href="https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css" rel="stylesheet" />
   <title>Document</title>
 </head>
 
 <body>
   <div class="main-wrapper">
-    <a href="/"><i class='bx bx-log-out log-out'></i></a>
+    <i class="bx bx-log-out log-out"></i>
     <h2 class="title">면접 설정</h2>
     <div class="container">
-      <div class="interview-setting__all">
-        <div class="interview-setting">
-          <div class="interview-setting__kind">
-            <h3>면접 카테고리</h3>
-            <select name="interview-setting__kind select">
+      <div class="interview-set">
+        <div class="interview-set__info">
+          <div class="interview-set__info--category">
+            <h3 class="interview-set__info--category-title">면접 카테고리</h3>
+            <select class="interview-set__info--category-select">
               <option>선택하기</option>
               <option value="Personality">인성면접</option>
               <option value="Frontend">Frontend</option>
               <option value="Backend">Backend</option>
             </select>
           </div>
-          <div class="interview-setting__cnt">
+          <div class="interview-set__info--count">
             <h3>질문 개수</h3>
-            <input class="interview-setting__cnt--input" type="text" placeholder="질문 개수를 20개 이하로 입력해주세요." />
+            <input class="interview-set__info--count-input" type="text" placeholder="질문 개수를 20개 이하로 입력해주세요." />
           </div>
-          <div class="interview-setting__time">
-            <h3>질문 별 답변 시간</h3>
-            <select name="interview-setting__time select">
+          <div class="interview-set__info--time">
+            <h3>질문별 답변 시간</h3>
+            <select class="interview-set__info--time-select">
               <option>선택하기</option>
               <option value="1">1분</option>
               <option value="2">2분</option>
@@ -43,43 +43,42 @@
             </select>
           </div>
         </div>
-        <div class="interview-setting__check">
+        <div class="permission-check">
           <h3>카메라/마이크 권한 허용</h3>
           <span>모의 면접은 카메라와 오디오 기반으로 진행됩니다. 카메라와 마이크 권한을 허용해주세요.</span>
-          <div class="interview-setting__check--btn">
-            <button class="interview-setting__check--btn-camera">
-              <div class="interview-setting__check--btn-icamera"></div>
-            </button>
-            <button class="interview-setting__check--btn-audio">
-              <div class="interview-setting__check--btn-iaudio"></div>
-            </button>
+          <div class="permission-check__video">
+            <video class="permission-check__video--cam" autoplay="false"></video>
+          </div>
+          <div class="permission-check__audio">
+            <canvas class="permission-check__audio--visualization"></canvas>
           </div>
         </div>
+        <div class="interview-guide"></div>
       </div>
-      <div class="interview-setting__guide"></div>
-      <!-- <div class="interview-setting__info"><span>선택한 Frontend 면접은 0문항으로 약 0분동안 진행됩니다.</span></div>
-        <div class="interview-setting__comment"><span>면접준비가 되었다면 면접 시작하기 버튼을 눌러주세요.</span></div> -->
-      <div class="interview-setting__start"><button disabled>면접 시작하기</button></div>
+      <div class="interview-start"><button class="interview-start__button" disabled>면접 시작하기</button></div>
     </div>
   </div>
   <div class="modal-wrap close">
-    <div class="modal__container">
-      <span class="modal__container--timer">10</span>
-      <h3 class="modal__container--title">모의 면접 안내</h3>
-      <p class="modal__container--content">
-        1.면접이 시작되면 녹음이 자동으로 진행되며, 면접 종료 후 녹음된 내용을 확인하실 수 있습니다.
+    <div class="modal-container">
+      <span class="modal-container__counter"></span>
+      <h3 class="modal-container__title">모의 면접 안내</h3>
+      <p class="modal-container__content">
+        1. 면접이 시작되면 녹음이 자동으로 진행되며, 면접 종료 후 녹음된 내용을 확인하실 수 있습니다.
       </p>
-      <p class="modal__container--content">
-        2.면접 시작 후 20초 이내에는 다시 시작 버튼을 눌러 타이머를 다시 시작할 수 있습니다.
+      <p class="modal-container__content">
+        2. 면접 시작 후 20초 이내에는 다시 시작 버튼을 눌러 타이머∫를 다시 시작할 수 있습니다.
       </p>
-      <p class="modal__container--content">3. 답변 제출 버튼 클릭 시 다음 질문으로 이동합니다.</p>
-      <div cl>
-        <p>타이머가 종료되면 자동으로 시작하기 버튼이 활성화 됩니다.</p>
+      <p class="modal-container__content">3. 답변 제출 버튼 클릭 시 다음 질문으로 이동합니다.</p>
+      <div class="modal-container__guide">
+        <p>타이머가 종료되면 자동으로 시작하기 버튼이 활성화됩니다.</p>
         <p>면접 준비가 되셨다면 시작하기 버튼을 눌러주세요.</p>
       </div>
-      <button class="modal__container--close close">X</button>
-      <button class="modal__container--start" disabled>시작하기</button>
+      <button class="modal-container__button--close close">X</button>
+      <button class="modal-container__button-start" disabled>시작하기</button>
     </div>
+    <button class="modal__container--close close">X</button>
+    <button class="modal__container--start" disabled>시작하기</button>
+  </div>
   </div>
   <script src="/src/js/setting.js"></script>
 </body>
