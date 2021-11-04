@@ -16,7 +16,10 @@ let state = {
 // DOM Nodes--------------------
 const $scrollUp = document.querySelector('.scroll-up');
 const $recordList = document.querySelector('.record-list');
-
+const $bar = document.querySelector('.bar');
+const $line = document.querySelector('.line');
+const $barChart = document.querySelector('.bar-chart');
+const $lineChart = document.querySelector('.line-chart');
 // Functions --------------------
 const createChart = () => {
   const labels = Array.from({ length: state.progressedTime.length }).map((_, i) => `${i + 1}번`);
@@ -47,6 +50,8 @@ const createChart = () => {
         ],
         barThickness: 40,
         borderWidth: 1,
+        fill: true,
+        tension: 0.2,
       },
     ],
   };
@@ -58,7 +63,7 @@ const createChart = () => {
       scales: {
         y: {
           min: 0,
-          max: state.selectedTime,
+          max: state.selectedTime / 60,
           ticks: {
             callback(value) {
               return value + '분';
@@ -68,29 +73,49 @@ const createChart = () => {
       },
     },
   };
-  (() => new Chart(document.querySelector('.chart'), config))();
+
+  const configLine = {
+    type: 'line',
+    data,
+    options: {
+      scales: {
+        y: {
+          min: 0,
+          max: state.selectedTime / 60,
+          ticks: {
+            callback(value) {
+              return value + '분';
+            },
+          },
+        },
+      },
+    },
+  };
+
+  (() => new Chart(document.querySelector('.bar-chart'), config))();
+  (() => new Chart(document.querySelector('.line-chart'), configLine))();
 };
 
 const render = () => {
   createChart();
 
   document.querySelector('.interview-type').innerHTML = `${state.category} 면접`;
-  document.querySelector('.total-time__min').innerHTML = `${state.totalTime}분`;
+  document.querySelector('.total-time__min').innerHTML = `${state.totalTime / 60}분`;
   document.querySelector('.average-time__min').innerHTML = `${Math.floor(
-    state.totalTime / state.questionList.length
+    state.totalTime / 60 / state.questionList.length
   )}분`;
   $recordList.innerHTML = state.questionList
     .map(
       ({ question, audio }) =>
-        `<div class="interview-question">
-          <li class="record-list__no">
-            <h4>${question}</h4>
+        `<li class="interview-question">
+      <div class="record-list__no">
+            <h4 class="question-ellipsis">${question}</h4>
             <audio class="record-list__no--audio" controls>
               <source src="${audio}" type="audio/wav" />
             </audio>
             <a class="download" href="" download="${audio}" title="download audio"> </a>
-            </li>
-        </div>`
+            </div>
+            </li>`
     )
     .join('');
 };
@@ -114,4 +139,23 @@ $scrollUp.onclick = () => {
     top: 0,
     behavior: 'smooth',
   });
+};
+document.querySelector('.chart-container').onclick = e => {
+  // if (!e.target.classList.contains('bar') || !e.target.classList.contains('line')) return;
+  console.log(e.target);
+  // [$bar, $line].map($el => {
+  //   $el.classList.toggle('active');
+  // });
+};
+$bar.onclick = e => {
+  e.target.style.background = '#605cff';
+  $line.style.background = '#c9c9c9';
+  $barChart.classList.add('active');
+  $lineChart.classList.remove('active');
+};
+$line.onclick = e => {
+  e.target.style.background = '#605cff';
+  $bar.style.background = '#c9c9c9';
+  $lineChart.classList.add('active');
+  $barChart.classList.remove('active');
 };
