@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const axios = require('axios');
 
@@ -144,12 +145,34 @@ const questionList = {
   Custom: [],
 };
 
+let news = {
+  updatedAt: 0,
+  articles: [],
+};
+
+const isValidNews = () => {
+  const halfDay = 1000 * 60 * 60 * 12;
+  return new Date() - news.updatedAt < halfDay;
+};
 app.get('/news', async (req, res) => {
+  if (news.updatedAt !== 0 && isValidNews()) {
+    res.send(news.articles);
+    return;
+  }
+
   try {
-    const { data } = await axios.get(
-      `https://newsapi.org/v2/top-headlines?country=kr&category=technology&pageSize=10&apiKey=${process.env.NEWS_API_KEY}`
+    const {
+      data: { articles },
+    } = await axios.get(
+      `
+      https://newsapi.org/v2/top-headlines?country=kr&category=technology&apiKey=${process.env.NEWS_API_KEY}`
     );
-    res.send(data.articles);
+
+    news = {
+      updatedAt: new Date(),
+      articles,
+    };
+    res.send(articles);
   } catch (e) {
     console.error(e.message);
   }
