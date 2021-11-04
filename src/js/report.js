@@ -16,7 +16,10 @@ let state = {
 // DOM Nodes--------------------
 const $scrollUp = document.querySelector('.scroll-up');
 const $recordList = document.querySelector('.record-list');
-
+const $bar = document.querySelector('.bar');
+const $line = document.querySelector('.line');
+const $barChart = document.querySelector('.bar-chart');
+const $lineChart = document.querySelector('.line-chart');
 // Functions --------------------
 const createChart = () => {
   const labels = Array.from({ length: state.progressedTime.length }).map((_, i) => `${i + 1}번`);
@@ -26,7 +29,7 @@ const createChart = () => {
       {
         label: '문제당 평균 진행 시간',
         // 동적 데이터
-        data: state.progressedTime.map(time => time / 60),
+        data: state.progressedTime.map(time => time),
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(255, 159, 64, 0.2)',
@@ -47,6 +50,8 @@ const createChart = () => {
         ],
         barThickness: 40,
         borderWidth: 1,
+        fill: true,
+        tension: 0.2,
       },
     ],
   };
@@ -61,30 +66,52 @@ const createChart = () => {
           max: state.selectedTime,
           ticks: {
             callback(value) {
-              return value + '분';
+              return value + '초';
             },
           },
         },
       },
     },
   };
-  (() => new Chart(document.querySelector('.chart'), config))();
+
+  const configLine = {
+    type: 'line',
+    data,
+    options: {
+      scales: {
+        y: {
+          min: 0,
+          max: state.selectedTime,
+          ticks: {
+            callback(value) {
+              return value + '초';
+            },
+          },
+        },
+      },
+    },
+  };
+
+  (() => new Chart(document.querySelector('.bar-chart'), config))();
+  (() => new Chart(document.querySelector('.line-chart'), configLine))();
 };
 
 const render = () => {
   createChart();
 
   document.querySelector('.interview-type').innerHTML = `${state.category} 면접`;
-  document.querySelector('.total-time__min').innerHTML = `${state.totalTime}분`;
-  document.querySelector('.average-time__min').innerHTML = `${Math.floor(
-    state.totalTime / state.questionList.length
-  )}분`;
+  document.querySelector('.total-time__min').innerHTML = `${parseInt(state.totalTime / 60)}분 ${
+    state.totalTime % 60
+  }초`;
+  document.querySelector('.average-time__min').innerHTML = `${parseInt(
+    state.totalTime / state.questionList.length / 60
+  )}분 ${(state.totalTime / state.questionList.length) % 60}초`;
   $recordList.innerHTML = state.questionList
     .map(({ question, audio }) => {
       const url = URL.createObjectURL(new Blob([new Uint8Array(audio.split(','))]));
       return `<div class="interview-question">
           <li class="record-list__no">
-            <h4>${question}</h4>
+            <h4 class="question-type">${question}</h4>
             <audio class="record-list__no--audio" controls>
               <source src="${url}" type="audio/wav" />
             </audio>
@@ -102,6 +129,7 @@ const setState = newState => {
 
 // Event Binding----------------
 window.addEventListener('DOMContentLoaded', async () => {
+  if (state.progressedTime.length === 0) window.location.replace('/');
   const { data } = await axios.get('/mockInterview', { maxBodyLength: Infinity });
   setState(data);
 });
@@ -114,4 +142,16 @@ $scrollUp.onclick = () => {
     top: 0,
     behavior: 'smooth',
   });
+};
+$bar.onclick = e => {
+  e.target.style.background = '#605cff';
+  $line.style.background = '#c9c9c9';
+  $barChart.classList.add('active');
+  $lineChart.classList.remove('active');
+};
+$line.onclick = e => {
+  e.target.style.background = '#605cff';
+  $bar.style.background = '#c9c9c9';
+  $lineChart.classList.add('active');
+  $barChart.classList.remove('active');
 };

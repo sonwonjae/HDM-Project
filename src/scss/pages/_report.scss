@@ -3,17 +3,17 @@
   padding: rem(20px);
   height: auto;
 }
-h2 {
+.report-type {
   font-size: rem(24px);
   padding-bottom: rem(20px);
 }
-h3 {
+.total-title {
   font-size: rem(20px);
   padding-bottom: rem(20px);
 }
-h4 {
+.question-type {
   text-align: left;
-  padding-bottom: rem(16px);
+  padding-bottom: rem(13px);
   padding-right: rem(16px);
 }
 .total-time {
@@ -22,17 +22,53 @@ h4 {
 .average-time {
   padding-bottom: rem(16px);
 }
-.chart {
+.chart-container {
+  position: relative;
+}
+.bar {
+  font-size: rem(12px);
+  color: $white;
+  position: absolute;
+  background-color: $light-gray;
+  top: 0;
+  right: 0;
+}
+.line {
+  font-size: rem(12px);
+  size: rem(14px);
+  color: $white;
+  position: absolute;
+  background-color: $main;
+  top: 0;
+  right: rem(65px);
+}
+.bar-chart {
   min-width: 325px;
   max-height: 400px;
   padding-bottom: 70px;
   padding-top: 20px;
+  display: none !important;
+}
+.bar-chart.active {
+  display: block !important;
+}
+.line-chart {
+  min-width: 325px;
+  max-height: 400px;
+  padding-bottom: 70px;
+  padding-top: 20px;
+  display: none !important;
+}
+.line-chart.active {
+  display: block !important;
 }
 .interview-question {
+  margin: rem(10px);
+  width: rem(311px);
   height: rem(150px);
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-around;
+  justify-content: space-evenly;
   position: relative;
 
   @include mobile {
@@ -40,15 +76,28 @@ h4 {
     display: block;
   }
 }
+.question-ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: rem(300px);
+  margin-top: rem(10px);
+  margin-bottom: rem(10px);
+}
 .record-list {
+  position: relative;
   display: flex;
   flex-flow: row wrap;
   justify-content: space-evenly;
   padding-bottom: rem(20px);
   &__no {
-    padding: 10px 0;
+    border: 1px solid $light-gray;
+    border-radius: 5px;
+    padding: 10px;
     .download {
-      padding: rem(6px);
+      padding: rem(7px);
+      margin-right: rem(10px);
+      margin-top: rem(10px);
       background-color: transparent;
       background-image: url('/src/img/Vector.png');
       background-size: cover;
