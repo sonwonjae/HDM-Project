@@ -29,7 +29,7 @@ const createChart = () => {
       {
         label: '문제당 평균 진행 시간',
         // 동적 데이터
-        data: state.progressedTime.map(time => time / 60),
+        data: state.progressedTime.map(time => time),
         backgroundColor: [
           'rgba(255, 99, 132, 0.2)',
           'rgba(255, 159, 64, 0.2)',
@@ -63,10 +63,10 @@ const createChart = () => {
       scales: {
         y: {
           min: 0,
-          max: state.selectedTime / 60,
+          max: state.selectedTime,
           ticks: {
             callback(value) {
-              return value + '분';
+              return value + '초';
             },
           },
         },
@@ -81,10 +81,10 @@ const createChart = () => {
       scales: {
         y: {
           min: 0,
-          max: state.selectedTime / 60,
+          max: state.selectedTime,
           ticks: {
             callback(value) {
-              return value + '분';
+              return value + '초';
             },
           },
         },
@@ -100,23 +100,25 @@ const render = () => {
   createChart();
 
   document.querySelector('.interview-type').innerHTML = `${state.category} 면접`;
-  document.querySelector('.total-time__min').innerHTML = `${state.totalTime / 60}분`;
-  document.querySelector('.average-time__min').innerHTML = `${Math.floor(
-    state.totalTime / 60 / state.questionList.length
-  )}분`;
+  document.querySelector('.total-time__min').innerHTML = `${parseInt(state.totalTime / 60)}분 ${
+    state.totalTime % 60
+  }초`;
+  document.querySelector('.average-time__min').innerHTML = `${parseInt(
+    state.totalTime / state.questionList.length / 60
+  )}분 ${(state.totalTime / state.questionList.length) % 60}초`;
   $recordList.innerHTML = state.questionList
-    .map(
-      ({ question, audio }) =>
-        `<li class="interview-question">
-      <div class="record-list__no">
-            <h4 class="question-ellipsis">${question}</h4>
+    .map(({ question, audio }) => {
+      const url = URL.createObjectURL(new Blob([new Uint8Array(audio.split(','))]));
+      return `<div class="interview-question">
+          <li class="record-list__no">
+            <h4>${question}</h4>
             <audio class="record-list__no--audio" controls>
-              <source src="${audio}" type="audio/wav" />
+              <source src="${url}" type="audio/wav" />
             </audio>
-            <a class="download" href="" download="${audio}" title="download audio"> </a>
-            </div>
-            </li>`
-    )
+            <a class="download" href="" download="${url}" title="download audio"> </a>
+            </li>
+        </div>`;
+    })
     .join('');
 };
 
@@ -127,8 +129,9 @@ const setState = newState => {
 
 // Event Binding----------------
 window.addEventListener('DOMContentLoaded', async () => {
-  const { data } = await axios.get('/mockInterview');
+  const { data } = await axios.get('/mockInterview', { maxBodyLength: Infinity });
   setState(data);
+  if (state.selectedTime === 0) window.location.replace('/');
 });
 window.onscroll = _.throttle(() => {
   window.pageYOffset > SCROLL_DOWN_PAGE_Y ? ($scrollUp.style.display = 'block') : ($scrollUp.style.display = 'none');
@@ -143,9 +146,7 @@ $scrollUp.onclick = () => {
 document.querySelector('.chart-container').onclick = e => {
   // if (!e.target.classList.contains('bar') || !e.target.classList.contains('line')) return;
   console.log(e.target);
-  // [$bar, $line].map($el => {
-  //   $el.classList.toggle('active');
-  // });
+  [$bar, $line].forEach($el => $el.classList.toggle('active'));
 };
 $bar.onclick = e => {
   e.target.style.background = '#605cff';

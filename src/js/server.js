@@ -1,47 +1,21 @@
 const express = require('express');
 const axios = require('axios');
+require('dotenv').config();
 
 const app = express();
 
 app.use(express.static('public'));
-app.use(express.json());
-
+// app.use(express.json());
+// app.use(express.urlencoded({ extended: true }));
+app.use(express.json({ limit: '50mb' }));
+app.use(express.urlencoded({ extended: true, limit: '50mb' }));
 // Mock
 const mockInterview = {
   category: 'Frontend',
   totalTime: 56,
   selectedTime: 3,
   progressedTime: [161, 90, 144, 105, 179, 180, 70, 173, 99, 130],
-  questionList: [
-    {
-      question: '1. 자기소개를 하세요',
-      audio: 'url',
-    },
-    {
-      question: '2. 강점 말해보세요',
-      audio: 'url2',
-    },
-    {
-      question: '3. 약점 말해보세요',
-      audio: 'url3',
-    },
-    {
-      question: '4. web viatal 설명 부탁',
-      audio: 'url4',
-    },
-    {
-      question: '5. this 바인딩 설명 부탁',
-      audio: 'url5',
-    },
-    {
-      question: '6. 취미 말해보세요 ',
-      audio: 'url6',
-    },
-    {
-      question: '7. 좋아하는 음식은? ',
-      audio: 'url7',
-    },
-  ],
+  questionList: [],
 };
 let userInfo = {
   interviewList: [],
@@ -140,6 +114,7 @@ const questionList = {
     '프로젝트를 진행하며 가장 어려웠던 점과 극복했던 방법을 얘기해주세요.',
     'Stack과 Queue의 차이점은 무엇인가요?',
   ],
+  Custom: [],
 };
 
 app.get('/news', async (req, res) => {
@@ -155,6 +130,7 @@ app.get('/news', async (req, res) => {
 // GET/mockInterview
 app.get('/mockInterview', (req, res) => {
   try {
+    // console.log(mockInterview);
     res.send(mockInterview);
   } catch (e) {
     console.error(e.message);
@@ -184,6 +160,21 @@ app.get('/questionList', (req, res) => {
   }
 });
 
+app.post('/questionList', (req, res) => {
+  try {
+    const { custom } = req.body;
+    const newCustomList = custom
+      .replace(/[`~!@#$%^&*()_|+\-=?;:'",.<>\{\}\[\]\\\/]/gm, '')
+      .split(/\r\n/g)
+      .map(str => str.trim());
+    questionList.Custom = [questionList.Custom, ...newCustomList];
+    res.send(questionList);
+  } catch (e) {
+    console.error(e.message);
+    res.status(500).send('error');
+  }
+});
+
 app.get('/userInfo', (req, res) => {
   try {
     res.send(userInfo);
@@ -194,7 +185,6 @@ app.get('/userInfo', (req, res) => {
 
 app.put('/userInfo/update', req => {
   const newUserInfo = req.body;
-  console.log(newUserInfo);
   userInfo = newUserInfo;
 });
 

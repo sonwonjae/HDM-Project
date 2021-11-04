@@ -12,7 +12,7 @@ const $modalContainerTimer = document.querySelector('.modal__container--timer');
 const $modalContainerStart = document.querySelector('.modal__container--start');
 const $container = document.querySelector('.container');
 
-let count = 10;
+let count = 1;
 
 // user interview setting state
 let selectedTime = 0;
