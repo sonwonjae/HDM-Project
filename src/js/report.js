@@ -129,9 +129,9 @@ const setState = newState => {
 
 // Event Binding----------------
 window.addEventListener('DOMContentLoaded', async () => {
+  if (state.progressedTime.length === 0) window.location.replace('/');
   const { data } = await axios.get('/mockInterview', { maxBodyLength: Infinity });
   setState(data);
-  if (state.selectedTime === 0) window.location.replace('/');
 });
 window.onscroll = _.throttle(() => {
   window.pageYOffset > SCROLL_DOWN_PAGE_Y ? ($scrollUp.style.display = 'block') : ($scrollUp.style.display = 'none');
