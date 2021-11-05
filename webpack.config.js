@@ -46,6 +46,10 @@ module.exports = {
       template: 'src/template/customQuestion.html',
       chunks: ['app', 'customQuestion'],
     }),
+    new HtmlWebpackPlugin({
+      filename: 'test.html',
+      template: 'src/template/test.html',
+    }),
     new MiniCssExtractPlugin({ filename: 'css/style.css' }),
   ],
   // https://webpack.js.org/configuration/module

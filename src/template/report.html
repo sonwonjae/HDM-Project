@@ -10,41 +10,43 @@
   <link href='https://unpkg.com/boxicons@2.0.9/css/boxicons.min.css' rel='stylesheet'>
   <title>한다면</title>
 </head>
-  <body>
-    <div class="main-wrapper">
-      <i class="bx bx-log-out log-out"></i>
-      <h2 class="title">면접 결과</h2>
-      <div class="container report-container">
-        <h2 class="interview-type report-type"></h2>
-        <div class="total-time">
-          <h3 class="total-title">총 진행 시간</h3>
-          <!-- 동적 -->
-          <p class="total-time__min"></p>
-        </div>
-        <div class="average-time">
-          <h3 class="total-title">문제 당 평균 진행 시간</h3>
-          <!-- 동적 -->
-          <p class="average-time__min"></p>
-        </div>
-        <div class="chart-container">
-          <button class="bar" id="bar">Bar Chart</button>
-          <button class="line clicked" id="line">Line Chart</button>
-          <canvas class="bar-chart" id="bar-chart" ></canvas>
-          <canvas class="line-chart active" id="line-chart"></canvas>
-        </div>
-        <div>
-          <h3 class="total-title">녹음 기록</h3>
-          <ul class="record-list">
-          </ul>
-        </div>
-        <footer>
-          <button class="scroll-up">
-            <a href="#" download></a>
-          </button>
-        </footer>
+
+<body>
+  <div class="main-wrapper">
+    <i class="bx bx-log-out log-out"></i>
+    <h2 class="title">면접 결과</h2>
+    <div class="container report-container">
+      <h2 class="interview-type report-type"></h2>
+      <div class="total-time">
+        <h3 class="total-title">총 진행 시간</h3>
+        <!-- 동적 -->
+        <p class="total-time__min"></p>
+      </div>
+      <div class="average-time">
+        <h3 class="total-title">문제 당 평균 진행 시간</h3>
+        <!-- 동적 -->
+        <p class="average-time__min"></p>
+      </div>
+      <div class="chart-container">
+        <button class="bar" id="bar">Bar Chart</button>
+        <button class="line clicked" id="line">Line Chart</button>
+        <canvas class="bar-chart" id="bar-chart"></canvas>
+        <canvas class="line-chart active" id="line-chart"></canvas>
+      </div>
+      <div>
+        <h3 class="total-title">녹음 기록</h3>
+        <ul class="record-list">
+        </ul>
+      </div>
+      <footer>
+        <button class="scroll-up">
+          <a href="#" download></a>
+        </button>
+      </footer>
     </div>
     <script src="../js/frontend/report.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/chart.js@3.6.0/dist/chart.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/lodash@4.17.21/lodash.min.js"></script>
-  </body>
+</body>
+
 </html>
