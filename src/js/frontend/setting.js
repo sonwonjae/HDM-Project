@@ -7,7 +7,7 @@ const $selectInterviewCategory = document.querySelector('.interview-set__info--c
 const $interviewSettingCnt = document.querySelector('.interview-set__info--count-input'); // 면접 질문 개수
 const $interviewSettingTime = document.querySelector('.interview-set__info--time-select'); // 면접 시간 선택
 const $startInterview = document.querySelector('.interview-start__button'); // 면접 시작 버튼
-const $interviewSetNotice = document.querySelector('.interview-set__notice'); // 설정된 면접 내용 공지
+const $interviewSetNotice = document.querySelector('.modal-container__guide'); // 설정된 면접 내용 공지
 const $audioVisualization = document.querySelector('.permission-check__audio--visualization'); // 오디오 테스트용
 const $modalWrap = document.querySelector('.modal-wrap');
 const $modalContainerTimer = document.querySelector('.modal-container__counter');
@@ -170,7 +170,6 @@ const render = () => {
   <strong>${interviewSettingCnt}</strong>문항으로
   약 ${selectedTime * interviewSettingCnt}분동안 진행됩니다.</span></div>
   <div><span>면접준비가 되었다면 면접 시작하기 버튼을 눌러주세요.</span></div>`;
-  $interviewSetNotice.classList.toggle('hidden', !checkStatus());
 };
 
 window.addEventListener('DOMContentLoaded', render(), checkMicPermission(), checkCameraPermission());
@@ -235,6 +234,7 @@ $interviewSettingCnt.onkeyup = e => {
 $startInterview.onclick = () => {
   setUser();
   $modalWrap.classList.add('active');
+  setModalTimer();
   counterId = setInterval(setModalTimer, 1000);
 };
 
