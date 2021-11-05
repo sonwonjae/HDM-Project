@@ -1,94 +1,134 @@
 @use '../base/' as *;
 
-.header {
+.banner {
+  min-width: 360px;
   background-color: $main;
   color: $white;
 
-  &__logo {
-    letter-spacing: 10px;
-    text-align: center;
-    font-weight: 700;
-  }
-  &__content {
-    &--slogan {
-      line-height: 1.3;
-      font-weight: 700;
-    }
-    .interview-link {
-      display: block;
-      border-radius: 15px;
-      background-color: $white;
-      color: $dark-gray;
-      white-space: nowrap;
-      text-align: center;
-      &__title {
-        font-weight: 700;
-        font-size: 20px;
-        // margin-bottom: 40px;
-      }
-      &__description {
-        line-height: 1.3;
-      }
-    }
-  }
-
   @include mobile {
-    // padding: 35px 15px;
-    padding-bottom: 15px;
-    &__logo {
+    padding: 35px 15px 14px;
+    &__title {
+      margin-bottom: 46px;
+      letter-spacing: 10px;
+      text-align: center;
+      font-weight: 700;
       font-size: 28px;
-      margin-bottom: 45px;
     }
 
     &__content {
       &--slogan {
+        word-spacing: 5px;
         margin-bottom: 45px;
-        font-size: 24px;
+        font-size: 28px;
+        line-height: 1.3;
+        font-weight: 700;
       }
-      .home-nav {
-        display: flex;
-        .interview-link {
-          padding: 20px;
-          width: 140px;
-          &:first-child {
-            margin-right: 20px;
-          }
-          &__title {
-            font-size: 14px;
-          }
+    }
+
+    .banner-nav {
+      width: 100%;
+      .interview-link {
+        margin-bottom: 14px;
+        padding: 28px;
+        width: 100%;
+        display: block;
+        border-radius: 15px;
+        background-color: $white;
+        color: $dark-gray;
+
+        &__title {
+          font-weight: 700;
+          font-size: 20px;
+        }
+        &__thumb {
+          text-align: right;
+          font-size: 60px;
+        }
+        &__description {
+          font-size: 16px;
+          line-height: 1.5;
+        }
+      }
+      .customQuestion-link {
+        padding: 13px 0;
+        width: 100%;
+        display: block;
+        border-radius: 15px;
+        background-color: $white;
+        color: $dark-gray;
+        text-align: center;
+        &__title {
+          font-size: 20px;
+          font-weight: 700;
         }
       }
     }
   }
   @include desktop {
     padding: 40px;
+    height: 540px;
 
-    &__logo {
+    &__title {
+      margin-bottom: 62px;
       font-size: 52px;
-      margin-bottom: 45px;
+      letter-spacing: 10px;
+      text-align: center;
+      font-weight: 700;
     }
 
     &__content {
       display: flex;
       justify-content: space-between;
-      align-items: center;
+      align-items: flex-end;
+
       &--slogan {
-        font-size: 36px;
+        line-height: 1.3;
+        font-weight: 700;
+        font-size: 60px;
+        white-space: nowrap;
       }
-      .home-nav {
-        display: flex;
+
+      .banner-nav {
+        min-width: 406px;
         .interview-link {
-          padding: 30px;
+          margin-bottom: 14px;
+          padding: 40px 32px 30px;
+          width: 100%;
+          display: block;
+          border-radius: 15px;
+          background-color: $white;
+          color: $dark-gray;
+
+          &__title {
+            font-weight: 700;
+            font-size: 36px;
+          }
+          &__thumb {
+            text-align: right;
+            font-size: 92px;
+          }
+          &__description {
+            font-size: 20px;
+            line-height: 1.5;
+          }
         }
-        .interview-link:first-child {
-          width: 200px;
-          margin-right: 20px;
+        .customQuestion-link {
+          padding: 17px 0;
+          width: 100%;
+          display: block;
+          border-radius: 15px;
+          background-color: $white;
+          color: $dark-gray;
+          text-align: center;
+          &__title {
+            font-size: 24px;
+            font-weight: 700;
+          }
         }
       }
     }
   }
 }
-
 .article {
   background-color: $white;
   @include mobile {
