@@ -1,4 +1,5 @@
 import axios from 'axios';
+import router from '../routes';
 
 const THROTTLE_DELAY = 100;
 const SCROLL_DOWN_PAGE_Y = 300;
@@ -124,7 +125,7 @@ const setState = newState => {
 };
 
 window.addEventListener('DOMContentLoaded', async () => {
-  const { data } = await axios.get('/interview', { maxBodyLength: Infinity });
+  const { data } = await axios.get(router.interview, { maxBodyLength: Infinity });
   setState(data);
   if (state.questionList.length === 0) window.location.replace('/');
 });
@@ -139,7 +140,6 @@ $scrollUp.onclick = () => {
     behavior: 'smooth',
   });
 };
-
 $displayBarBtn.onclick = e => {
   e.target.style.background = '#605cff';
   $displayLineBtn.style.background = '#c9c9c9';

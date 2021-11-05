@@ -54,20 +54,24 @@
 }
 .bar,
 .line {
+  background-color: $light-gray;
   font-size: rem(12px);
   color: $white;
   position: absolute;
   top: 0;
   border: none;
   border-radius: 7px;
+  background: '#605cff';
 }
 .bar {
-  background-color: $light-gray;
   right: 0;
 }
 .line {
-  background-color: $main;
   right: rem(65px);
+}
+.bar.clicked,
+.line.clicked {
+  background-color: $main;
 }
 .bar-chart,
 .line-chart {
