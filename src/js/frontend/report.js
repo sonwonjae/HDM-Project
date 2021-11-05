@@ -112,7 +112,7 @@ const render = () => {
               <audio class="record-list__no--audio" controls>
                 <source src="${url}" type="audio/wav" />
               </audio>
-              <a class="download" href="" download="${url}" title="download audio"> </a>
+              <a class="download" href="${url}" download="${question}.wav" title="download audio"> </a>
             </div>
           </li>`;
     })
