@@ -2,6 +2,8 @@ import axios from 'axios';
 import timer from './utils/timer';
 import modals from './utils/modal';
 
+const router = require('../routes');
+
 // DOM Nodes
 const $title = document.querySelector('.title');
 
@@ -115,7 +117,7 @@ const displayResultModal = modaltype => {
 window.addEventListener('DOMContentLoaded', async () => {
   const {
     data: { interviewList, interviewCategory, selectedTime },
-  } = await axios.get('/userInfo');
+  } = await axios.get(router.user);
 
   questionList = interviewList;
   interviewTime = selectedTime * 60;
@@ -123,7 +125,7 @@ window.addEventListener('DOMContentLoaded', async () => {
   $title.textContent = interviewCategory;
   $interviewCountCurrent.textContent = currentInterviewNum;
   $interviewCountTotal.textContent = interviewList.length;
-  if (lastInterviewNum === 0) window.location.replace('/');
+  // if (lastInterviewNum === 0) window.location.replace('/');
   displayModal(modals.init);
   await setAudio();
 });
@@ -178,7 +180,7 @@ $modalActionButton.addEventListener('click', async e => {
   }
 
   try {
-    const { data: userInfo } = await axios.get('/userInfo');
+    const { data: userInfo } = await axios.get(router.user);
     interviewResult.category = userInfo.interviewCategory;
     interviewResult.selectedTime = userInfo.selectedTime * 60;
 
@@ -196,7 +198,7 @@ $modalActionButton.addEventListener('click', async e => {
         interviewResult.questionList.push({ question: `${i + 1}. ${questionList[i]}`, audio: e });
       });
 
-      await axios.put('/mockInterview/update', interviewResult, { maxBodyLength: Infinity });
+      await axios.put(router.interview, interviewResult, { maxBodyLength: Infinity });
 
       window.location.replace('/report.html');
     } else {
