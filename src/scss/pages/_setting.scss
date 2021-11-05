@@ -197,6 +197,7 @@
   border-radius: 15px;
   box-shadow: 3px 3px 8px 0 rgba(0, 0, 0, 0.5);
   justify-content: center;
+  overflow-y: auto;
 
   &__counter {
     font-size: 48px;
@@ -258,5 +259,28 @@
       color: $light-gray;
       margin-top: 40px;
     }
+  }
+}
+
+@include mobile {
+  .modal-container__guide {
+    margin-top: 20px;
+  }
+
+  .modal-container__guide,
+  .modal-container__content {
+    font-size: 12px;
+  }
+
+  .interview-set__notice--selected {
+    width: 100%;
+    font-weight: 400;
+    text-align: center;
+    font-size: 12px;
+    line-height: 1.5;
+  }
+
+  .modal-container__start {
+    margin-top: 20px;
   }
 }
