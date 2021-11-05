@@ -1,7 +1,7 @@
 const modals = {
   init: {
     type: 'init',
-    title: '3초 후 버튼이 활성화됩니다.',
+    title: '면접 준비가 완료되었습니다!',
     description: '준비가 되셨으면 시작하기 버튼을 눌러주세요.',
     cancel: false,
     button: '시작하기',

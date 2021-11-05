@@ -1,6 +1,7 @@
 import axios from 'axios';
 import timer from './utils/timer';
 import modals from './utils/modal';
+import router from '../routes';
 
 // DOM Nodes
 const $title = document.querySelector('.title');
@@ -24,7 +25,7 @@ let mediaRecorder;
 let interviewTime = 0;
 let currentInterviewNum = 1;
 let lastInterviewNum = 0;
-const canResetTime = 20;
+const canResetTime = 10;
 
 let questionList = [];
 const recordList = [];
@@ -47,6 +48,7 @@ const setVideo = async () => {
     },
   });
   $interviewCamMain.srcObject = videoStream;
+  $modalTitle.textContent = `면접 준비가 완료되었습니다!`;
 };
 
 const setAudio = async () => {
@@ -80,22 +82,9 @@ const setAudio = async () => {
 
 // helper
 const displayModal = ({ type, title, description, cancel, button }) => {
-  // 빼도 되는지 확인
   timer.stop();
 
-  if (type === 'init') {
-    let count = 3;
-    $modalActionButton.toggleAttribute('disabled', true);
-    setTimeout(() => {
-      $modalActionButton.toggleAttribute('disabled', false);
-      $modalTitle.textContent = `면접 준비가 완료되었습니다!`;
-    }, count * 1000);
-    const intervalId = setInterval(() => {
-      count--;
-      if (count === 1) clearInterval(intervalId);
-      $modalTitle.textContent = `${count}초 후 버튼이 활성화됩니다.`;
-    }, 1000);
-  }
+  if (type === 'init') $modalActionButton.toggleAttribute('disabled', false);
 
   $modalTitle.textContent = title;
   $modalDescription.textContent = description;
@@ -115,7 +104,7 @@ const displayResultModal = modaltype => {
 window.addEventListener('DOMContentLoaded', async () => {
   const {
     data: { interviewList, interviewCategory, selectedTime },
-  } = await axios.get('/userInfo');
+  } = await axios.get(router.user);
 
   questionList = interviewList;
   interviewTime = selectedTime * 60;
@@ -124,28 +113,24 @@ window.addEventListener('DOMContentLoaded', async () => {
   $interviewCountCurrent.textContent = currentInterviewNum;
   $interviewCountTotal.textContent = interviewList.length;
   if (lastInterviewNum === 0) window.location.replace('/');
-  displayModal(modals.init);
   await setAudio();
+  await setVideo();
+  displayModal(modals.init);
 });
 
-// 다시 시작
-$interviewRepeatButton.addEventListener('click', () => {
+$interviewRepeatButton.onclick = () => {
   mediaRecorder.pause();
-  timer.stop();
   $interviewAudioIconState.classList.remove('audio-run');
   displayModal(modals.repeat);
-});
+};
 
-// 답변 제출
-$interviewSubmitButton.addEventListener('click', () => {
+$interviewSubmitButton.onclick = () => {
   mediaRecorder.pause();
-  timer.stop();
   $interviewAudioIconState.classList.remove('audio-run');
   displayResultModal(modals.submit);
-});
+};
 
-// 취소 버튼 클릭
-$modalCancelButton.addEventListener('click', () => {
+$modalCancelButton.onclick = () => {
   mediaRecorder.resume();
   $interviewAudioIconState.classList.add('audio-run');
 
@@ -161,24 +146,22 @@ $modalCancelButton.addEventListener('click', () => {
   }, 1000);
 
   $modalOuter.classList.toggle('hidden');
-});
+};
 
-// 제출 버튼 클릭
-$modalActionButton.addEventListener('click', async e => {
+$modalActionButton.onclick = async e => {
   const { type } = e.currentTarget.dataset;
 
   if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
   mediaRecorder.start();
 
-  if (type === 'init') setVideo();
-  else if (type === 'repeat') mediaRecorder.repeat = 'repeat';
+  if (type === 'repeat') mediaRecorder.repeat = 'repeat';
   else if (type === 'submit' || type === 'timeout') {
     currentInterviewNum += 1;
     $interviewCountCurrent.textContent = currentInterviewNum;
   }
 
   try {
-    const { data: userInfo } = await axios.get('/userInfo');
+    const { data: userInfo } = await axios.get(router.user);
     interviewResult.category = userInfo.interviewCategory;
     interviewResult.selectedTime = userInfo.selectedTime * 60;
 
@@ -196,7 +179,7 @@ $modalActionButton.addEventListener('click', async e => {
         interviewResult.questionList.push({ question: `${i + 1}. ${questionList[i]}`, audio: e });
       });
 
-      await axios.put('/mockInterview/update', interviewResult, { maxBodyLength: Infinity });
+      await axios.put(router.interview, interviewResult, { maxBodyLength: Infinity });
 
       window.location.replace('/report.html');
     } else {
@@ -225,7 +208,7 @@ $modalActionButton.addEventListener('click', async e => {
   timer.stop();
   timer.setTime(interviewTime);
   timer.start(() => {
-    if (timer.getTime() <= 0) {
+    if (timer.getTime() === 1) {
       $interviewAudioIconState.classList.remove('audio-run');
       if (mediaRecorder.state !== 'inactive') mediaRecorder.stop();
       displayResultModal(modals.timeout);
@@ -236,4 +219,4 @@ $modalActionButton.addEventListener('click', async e => {
 
   $interviewAudioIconState.classList.add('audio-run');
   $modalOuter.classList.toggle('hidden', true);
-});
+};
