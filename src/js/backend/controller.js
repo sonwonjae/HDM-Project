@@ -18,10 +18,10 @@ exports.getNews = async (req, res) => {
     } = await axios.get(
       `https://newsapi.org/v2/top-headlines?country=kr&category=technology&apiKey=${process.env.NEWS_API_KEY}`
     );
-    db.news.value = {
+    db.setNews({
       updatedAt: new Date(),
       articles,
-    };
+    });
     res.send(articles);
   } catch (e) {
     console.error(e.message);
@@ -38,7 +38,7 @@ exports.getInterview = (req, res) => {
 
 exports.putInterview = (req, res) => {
   try {
-    db.interview.value = req.body;
+    db.setInterview(req.body);
     res.send(db.interview);
   } catch (e) {
     console.error(e.message);
@@ -61,8 +61,7 @@ exports.postQuestionList = (req, res) => {
       .split(/\r\n/g)
       .map(str => str.trim());
 
-    db.questionList.customValue = newCustomList;
-    // console.log({ custom: [...db.questionList.custom, ...newCustomList] });
+    db.setCustom(newCustomList);
     res.send(db.questionList);
   } catch (e) {
     console.error(e.message);
@@ -80,8 +79,7 @@ exports.getUser = (req, res) => {
 
 exports.putUser = (req, res) => {
   try {
-    const newUser = req.body;
-    db.user.value = newUser;
+    db.setUser(req.body);
     res.send(db.user);
   } catch (e) {
     console.error(e.message);

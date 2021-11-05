@@ -5,22 +5,20 @@ const db = {
     selectedTime: 3,
     interviewTimeList: [161, 90, 144, 105, 179, 180, 70, 173, 99, 130],
     questionList: [],
-
-    set value(newInterview) {
-      db.interview = { ...db.interview, ...newInterview };
-    },
   },
 
+  setInterview(newInterview) {
+    this.interview = newInterview;
+  },
   user: {
     interviewList: [],
     interviewCategory: '',
     cameraPermission: false,
     micPermission: false,
     selectedTime: '',
-
-    set value(newUser) {
-      db.user = { ...db.user, ...newUser };
-    },
+  },
+  setUser(newUser) {
+    this.user = newUser;
   },
 
   questionList: {
@@ -111,19 +109,17 @@ const db = {
       'Stack과 Queue의 차이점은 무엇인가요?',
     ],
     custom: [],
-
-    set customValue(newCustomList) {
-      this.custom = [...this.custom, ...newCustomList];
-    },
+  },
+  setCustom(newCustom) {
+    this.questionList.custom = [...this.questionList.custom, ...newCustom];
   },
 
   news: {
     updatedAt: 0,
     articles: [],
-
-    set value(newNews) {
-      db.news = { ...db.news, newNews };
-    },
+  },
+  setNews(newNews) {
+    this.news = newNews;
   },
 };
 
