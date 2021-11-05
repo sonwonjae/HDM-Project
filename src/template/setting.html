@@ -16,69 +16,76 @@
     <h2 class="title">면접 설정</h2>
     <div class="container">
       <div class="interview-set">
-        <div class="interview-set__info">
-          <div class="interview-set__info--category">
-            <h3 class="interview-set__info--category-title">면접 카테고리</h3>
-            <select class="interview-set__info--category-select">
-              <option>선택하기</option>
-              <option value="Personality">인성면접</option>
-              <option value="Frontend">Frontend</option>
-              <option value="Backend">Backend</option>
-            </select>
+        <div class="interview-set__up">
+          <div class="interview-set__info">
+            <div class="interview-set__info--category">
+              <h3 class="interview-set__info--title">면접 카테고리</h3>
+              <select class="interview-set__info--category-select">
+                <option value="">선택하기</option>
+                <option value="personality">인성면접</option>
+                <option value="situation">상황면접</option>
+                <option value="frontend">Frontend</option>
+                <option value="backend">Backend</option>
+                <option value="custom">사용자 등록 질문</option>
+              </select>
+            </div>
+            <div class="interview-set__info--count">
+              <h3 class="interview-set__info--title">질문 개수</h3>
+              <input class="interview-set__info--count-input" type="text" placeholder="질문 개수를 20개 이하로 입력해주세요." />
+            </div>
+            <div class="interview-set__info--time">
+              <h3 class="interview-set__info--title">질문별 답변 시간</h3>
+              <select class="interview-set__info--time-select">
+                <option value="">선택하기</option>
+                <option value="1">1분</option>
+                <option value="2">2분</option>
+                <option value="3">3분</option>
+                <option value="5">5분</option>
+                <option value="10">10분</option>
+                <option value="15">15분</option>
+              </select>
+            </div>
           </div>
-          <div class="interview-set__info--count">
-            <h3>질문 개수</h3>
-            <input class="interview-set__info--count-input" type="text" placeholder="질문 개수를 20개 이하로 입력해주세요." />
-          </div>
-          <div class="interview-set__info--time">
-            <h3>질문별 답변 시간</h3>
-            <select class="interview-set__info--time-select">
-              <option>선택하기</option>
-              <option value="1">1분</option>
-              <option value="2">2분</option>
-              <option value="3">3분</option>
-              <option value="5">5분</option>
-              <option value="10">10분</option>
-              <option value="15">15분</option>
-            </select>
+          <div class="permission-check">
+            <h3 class="permission-check__title">카메라/마이크 권한 허용</h3>
+            <span>모의 면접은 카메라와 오디오 기반으로 진행됩니다.</span>
+            <span> 카메라, 마이크 권한을 허용해주세요.</span>
+            <div class="permission-check__video">
+              <video class="permission-check__video--cam" autoplay="false"></video>
+            </div>
+            <div class="permission-check__audio">
+              <canvas class="permission-check__audio--visualization"></canvas>
+            </div>
           </div>
         </div>
-        <div class="permission-check">
-          <h3>카메라/마이크 권한 허용</h3>
-          <span>모의 면접은 카메라와 오디오 기반으로 진행됩니다. 카메라와 마이크 권한을 허용해주세요.</span>
-          <div class="permission-check__video">
-            <video class="permission-check__video--cam" autoplay="false"></video>
-          </div>
-          <div class="permission-check__audio">
-            <canvas class="permission-check__audio--visualization"></canvas>
-          </div>
+        <div class="interview-set__bottom">
+          <div class="interview-set__notice hidden"></div>
+          <div class="interview-start"><button class="interview-start__button" disabled>면접 시작하기</button></div>
         </div>
-        <div class="interview-guide"></div>
       </div>
-      <div class="interview-start" disabled><button class="interview-start__button">면접 시작하기</button></div>
     </div>
   </div>
   <div class="modal-wrap close">
     <div class="modal-container">
-      <span class="modal-container__counter"></span>
+      <span class="modal-container__counter">5</span>
       <h3 class="modal-container__title">모의 면접 안내</h3>
       <p class="modal-container__content">
         1. 면접이 시작되면 녹음이 자동으로 진행되며, 면접 종료 후 녹음된 내용을 확인하실 수 있습니다.
       </p>
       <p class="modal-container__content">
-        2. 면접 시작 후 20초 이내에는 다시 시작 버튼을 눌러 타이머∫를 다시 시작할 수 있습니다.
+        2. 면접 시작 후 20초 이내에는 다시 시작 버튼을 눌러 타이머를 다시 시작할 수 있습니다.
       </p>
       <p class="modal-container__content">3. 답변 제출 버튼 클릭 시 다음 질문으로 이동합니다.</p>
       <div class="modal-container__guide">
         <p>타이머가 종료되면 자동으로 시작하기 버튼이 활성화됩니다.</p>
         <p>면접 준비가 되셨다면 시작하기 버튼을 눌러주세요.</p>
       </div>
-      <button class="modal-container__button--close close">X</button>
-      <button class="modal-container__button-start" disabled>시작하기</button>
+      <button class="modal-container__close close">X</button>
+      <button class="modal-container__start" disabled>시작하기</button>
     </div>
   </div>
   </div>
-  <script src="/src/js/setting.js"></script>
+  <!-- <script src="/src/js/frontend/setting.js"></script> -->
 </body>
 
 </html>

@@ -75,6 +75,12 @@ body {
           background-color: $red;
         }
       }
+      &--stop {
+        width: 26px;
+        height: 26px;
+        border-radius: 0;
+        background-color: $dark-gray;
+      }
     }
   }
 
@@ -118,6 +124,13 @@ body {
   &__describtion {
     width: 220px;
   }
+  &__button {
+    transition: all 0.4s ease;
+
+    &:focus {
+      outline: none;
+    }
+  }
   @include desktop {
     width: 60%;
     max-width: 600px;
@@ -131,13 +144,14 @@ body {
       width: 100%;
     }
   }
-  & .cancle {
+  & .cancel {
     position: absolute;
     top: 10px;
     right: 10px;
     font-size: 32px;
     padding: 0;
     line-height: 1;
+    border: none;
     background-color: transparent;
   }
 }

@@ -1,7 +1,7 @@
 const modals = {
   init: {
     type: 'init',
-    title: '3초 후 버튼이 활성화됩니다.',
+    title: '면접 준비가 완료되었습니다!',
     description: '준비가 되셨으면 시작하기 버튼을 눌러주세요.',
     cancel: false,
     button: '시작하기',
@@ -33,6 +33,16 @@ const modals = {
     description: '결과 보기 버튼을 누르시면 결과 창으로 이동합니다.',
     cancel: false,
     button: '결과 보기',
+  },
+  successCustom: {
+    title: '입력되었습니다.',
+    description: '',
+    cancel: false,
+  },
+  failCustom: {
+    title: '입력을 실패했습니다.',
+    description: '다시 입력해주세요.',
+    cancel: false,
   },
 };
 

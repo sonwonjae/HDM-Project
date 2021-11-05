@@ -21,7 +21,8 @@
       <h3 class="interview__count">
         <span class="interview__count--current"></span>
         /
-        <span class="interview__count--total"></span></h3>
+        <span class="interview__count--total"></span>
+      </h3>
 
       <div class="interview__cam">
         <video class="interview__cam-main" autoplay></video>
@@ -42,12 +43,12 @@
 
     </div>
 
-    <div class="modal-outer hidden">
+    <div class="modal-outer">
       <div class="modal">
-        <button class="cancel"><i class="bx bx-x"></i></button>
-        <h2 class="modal__title"></h2>
-        <p class="modal__description"></p>
-        <button class="modal__button modal__button--active" type="button"></button>
+        <button class="cancel hidden"><i class="bx bx-x"></i></button>
+        <h2 class="modal__title">카메라와 오디오를 준비중입니다...</h2>
+        <p class="modal__description">준비가 되셨으면 시작하기 버튼을 눌러주세요.</p>
+        <button class="modal__button modal__button--active" type="button" disabled>시작하기</button>
       </div>
     </div>
 
