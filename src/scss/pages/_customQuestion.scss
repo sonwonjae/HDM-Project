@@ -4,7 +4,7 @@
   margin: 0 auto;
   display: flex;
   flex-direction: column;
-  justify-content: center;
+  margin-top: 100px;
   align-items: center;
   height: 100vh;
   width: 100%;
@@ -13,66 +13,45 @@
 }
 .guide {
   color: $white;
-  @include mobile {
-    font-size: 20px;
-    margin-bottom: 20px;
-  }
-  @include desktop {
-    font-size: 24px;
-    margin-bottom: 30px;
-  }
+  font-size: 18px;
+  margin-bottom: 20px;
 }
 .form {
   width: 100%;
-  .question-list {
+  .question-textarea {
+    margin-bottom: 50px;
     display: block;
     width: 100%;
-    height: 200px;
+    height: 300px;
     padding: 10px;
     border-radius: 15px;
     resize: none;
   }
-  .add-button {
-    width: 100%;
-    display: block;
-
-    &:disabled {
-      opacity: 0.7;
-      cursor: not-allowed;
-    }
-  }
-  @include mobile {
-    margin-bottom: 30px;
-    .question-list {
-      margin-bottom: 30px;
-    }
-  }
-  @include desktop {
-    margin-bottom: 40px;
-    .question-list {
-      margin-bottom: 40px;
-    }
+  .add-button:disabled {
+    opacity: 0.7;
+    cursor: not-allowed;
   }
 }
-.button {
-  font-size: 20px;
-  font-weight: 700;
+.question-button {
   padding: 16px 32px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+  height: 56px;
   border: none;
   background-color: $white;
-  color: $dark-gray;
   border-radius: 10px;
   box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+  color: $dark-gray;
+  font-size: 20px;
+  font-weight: 700;
   &:first-child:disabled {
     opacity: 0.6;
   }
 }
 
 .navigation {
+  margin-top: 20px;
   width: 100%;
-  display: flex;
-  justify-content: space-between;
-  .button {
-    display: block;
-  }
 }

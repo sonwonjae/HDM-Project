@@ -34,6 +34,16 @@ const modals = {
     cancel: false,
     button: '결과 보기',
   },
+  successCustom: {
+    title: '입력되었습니다.',
+    description: '',
+    cancel: false,
+  },
+  failCustom: {
+    title: '입력을 실패했습니다.',
+    description: '다시 입력해주세요.',
+    cancel: false,
+  },
 };
 
 export default modals;
