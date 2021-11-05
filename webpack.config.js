@@ -9,7 +9,7 @@ module.exports = {
   entry: {
     app: './src/js/frontend/app.js',
     home: './src/js/frontend/home.js',
-    setting: './src/js/frontend/setting',
+    setting: './src/js/frontend/setting.js',
     interview: './src/js/frontend/interview.js',
     report: './src/js/frontend/report.js',
     customQuestion: './src/js/frontend/customQuestion.js',
