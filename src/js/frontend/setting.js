@@ -145,7 +145,7 @@ const checkMicPermission = () => {
 const checkCameraPermission = () => {
   const constraints = {
     video: {
-      facingMode: 'user',
+      facingMode: 'environment',
     },
   };
   navigator.mediaDevices
