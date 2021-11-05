@@ -1,7 +1,6 @@
 @use './../base' as *;
 .main-wrapper .report-container {
   padding: rem(50px);
-  height: auto;
   border-radius: 20px;
   border-bottom-left-radius: 0;
   border-bottom-right-radius: 0;
@@ -111,8 +110,10 @@
   position: relative;
   display: flex;
   flex-flow: row wrap;
-  justify-content: space-between;
+  justify-content: flex-start;
   padding-bottom: rem(20px);
+  column-gap: 20px;
+
   &__no {
     border: 1px solid $light-gray;
     border-radius: 5px;
