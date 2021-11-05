@@ -31,9 +31,16 @@
       width: 40%;
     }
     &--title {
+      @include desktop {
+        font-size: 24px;
+        margin-top: 20px;
+        &.first {
+          margin-top: 0;
+        }
+      }
       font-size: 16px;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 16px;
     }
 
     &--category-select,
@@ -83,23 +90,35 @@
   }
 
   &__title {
+    @include desktop {
+      font-size: 24px;
+    }
+
     font-size: 16px;
     font-weight: 700;
     margin-bottom: 22px;
   }
 
   &__video {
-    width: 100%;
+    display: flex;
+    max-width: 550px;
+    height: 300px;
+    overflow: hidden;
     margin-top: 17px;
+    justify-content: space-evenly;
+    align-items: center;
+    text-align: center;
+    border-radius: 10px;
 
     &--cam {
-      width: 100%;
-      border-radius: 10px;
+      width: 1280px;
+      height: 720px;
+      // border-radius: 10px;
     }
   }
 
   &__audio {
-    width: 100%;
+    max-width: 550px;
     height: 100px;
 
     &--visualization {
@@ -113,7 +132,7 @@
 /*=== 면접 가이드 & 시작하기 ===*/
 .interview-start {
   display: flex;
-  margin-top: 37px;
+  margin-top: 60px;
   margin-bottom: 17px;
   justify-content: center;
 
@@ -226,7 +245,7 @@
     border-radius: 10px;
     background-color: $main;
     margin-top: 40px;
-    width: 142px;
+    max-width: 142px;
     color: white;
     align-self: center;
     font-size: 20px;
