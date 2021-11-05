@@ -1,33 +1,33 @@
 import axios from 'axios';
+import modals from './utils/modal.js';
 
-const $questionList = document.querySelector('.question-list');
+const $questionTextarea = document.querySelector('.question-textarea');
 const $modalOuter = document.querySelector('.modal-outer');
 const $addButton = document.querySelector('.add-button');
 
 document.querySelector('.form').addEventListener('submit', async e => {
   e.preventDefault();
-
-  const questionString = $questionList.value;
-  let modalTitle = '';
+  let modalState;
 
   try {
-    await axios.post('/questionList', { custom: questionString });
-    modalTitle = '입력되었습니다.';
+    const { data } = await axios.post('/questionList', { custom: $questionTextarea.value });
+    modalState = modals.successCustom;
+    console.log(data);
   } catch (e) {
-    modalTitle = '입력을 실패했습니다.';
+    modalState = modals.failCustom;
     console.error(e);
-  } finally {
-    $modalOuter.classList.remove('hidden');
-    document.querySelector('.modal__title').textContent = modalTitle;
-    $questionList.value = '';
-    $addButton.disabled = true;
   }
+  $modalOuter.classList.remove('hidden');
+  document.querySelector('.modal__title').textContent = modalState.title;
+  document.querySelector('.modal__describtion').textContent = modalState.description;
+  $questionTextarea.value = '';
+  $addButton.disabled = true;
 });
 
 document.querySelector('.modal__button').addEventListener('click', () => {
   $modalOuter.classList.add('hidden');
 });
 
-$questionList.addEventListener('input', () => {
-  $addButton.disabled = $questionList.value === '';
+$questionTextarea.addEventListener('input', () => {
+  $addButton.disabled = $questionTextarea.value === '';
 });
