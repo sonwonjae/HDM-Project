@@ -1,0 +1,161 @@
+@use '../base' as *;
+
+body {
+  background-color: $main;
+}
+
+.interview {
+  min-width: 315px;
+  display: flex;
+  flex-direction: column;
+  height: 85%;
+  justify-content: space-between;
+
+  &__count {
+    text-align: center;
+    font-size: 24px;
+    font-weight: bold;
+    color: $white;
+  }
+
+  &__cam {
+    overflow: hidden;
+    position: relative;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 auto;
+    border-radius: 20px;
+    width: 100%;
+    min-height: 60%;
+    max-width: 800px;
+    background-color: $white;
+    box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+    @include desktop {
+      min-height: 70%;
+    }
+
+    &-main {
+      width: 1280px;
+      height: 720px;
+    }
+  }
+
+  &__audio {
+    width: 100%;
+    max-width: 800px;
+    align-self: center;
+    display: flex;
+    justify-content: flex-end;
+
+    &-icon {
+      min-height: 42px;
+      margin-top: 10px;
+      margin-bottom: -10px;
+      width: 42px;
+      height: 42px;
+      align-self: flex-end;
+      border-radius: 50%;
+      background-color: $white;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+
+      &--state {
+        width: 26px;
+        height: 26px;
+        border-radius: 0;
+        background-color: $dark-gray;
+
+        &.audio-run {
+          width: 26px;
+          height: 26px;
+          border-radius: 50%;
+          background-color: $red;
+        }
+      }
+      &--stop {
+        width: 26px;
+        height: 26px;
+        border-radius: 0;
+        background-color: $dark-gray;
+      }
+    }
+  }
+
+  &__timer {
+    font-weight: 300;
+    font-size: 68px;
+    text-align: center;
+    color: $white;
+    letter-spacing: 0.05rem;
+    margin-top: -20px;
+    @include desktop {
+      font-size: 80px;
+    }
+  }
+
+  &__buttons {
+    display: flex;
+    justify-content: space-between;
+    max-width: 800px;
+    width: 100%;
+    align-self: center;
+
+    & button {
+      font-size: 20px;
+      font-weight: 700;
+      padding: 16px 32px;
+      border: none;
+      background-color: $white;
+      color: $dark-gray;
+      border-radius: 10px;
+      box-shadow: 0px 4px 4px rgba(0, 0, 0, 0.25);
+      &:first-child:disabled {
+        opacity: 0.6;
+      }
+    }
+  }
+}
+
+.modal {
+  position: relative;
+  &__describtion {
+    width: 220px;
+  }
+  &__button {
+    transition: all 0.4s ease;
+
+    &:focus {
+      outline: none;
+    }
+  }
+  @include desktop {
+    width: 60%;
+    max-width: 600px;
+
+    &__title {
+      font-size: 32px;
+      margin-top: 40px;
+      padding-bottom: 0;
+    }
+    &__describtion {
+      width: 100%;
+    }
+  }
+  & .cancel {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 32px;
+    padding: 0;
+    line-height: 1;
+    border: none;
+    background-color: transparent;
+  }
+}
+
+.hidden {
+  display: none;
+}

@@ -1,0 +1,152 @@
+@use './../base' as *;
+.main-wrapper .report-container {
+  padding: rem(50px);
+  border-radius: 20px;
+  border-bottom-left-radius: 0;
+  border-bottom-right-radius: 0;
+
+  @include mobile {
+    padding: 20px;
+    border-radius: 5px;
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+}
+.report-type {
+  font-size: 36px;
+  font-weight: 700;
+  padding-bottom: rem(35px);
+
+  @include mobile {
+    font-size: 24px;
+    padding-bottom: 40px;
+  }
+}
+.total-title {
+  font-size: 20px;
+  font-weight: 700;
+  padding-bottom: rem(25px);
+
+  @include mobile {
+    font-size: 16px;
+    padding-bottom: 15px;
+  }
+  &__min {
+    @include mobile {
+      font-size: 14px;
+    }
+  }
+}
+.question-type {
+  text-align: left;
+  padding-bottom: rem(13px);
+  padding-right: rem(16px);
+}
+.total-time {
+  padding-bottom: rem(25px);
+}
+.average-time {
+  padding-bottom: rem(16px);
+}
+.chart-container {
+  position: relative;
+}
+.bar,
+.line {
+  background-color: $light-gray;
+  font-size: rem(12px);
+  color: $white;
+  position: absolute;
+  top: 0;
+  border: none;
+  border-radius: 7px;
+  background: '#605cff';
+}
+.bar {
+  right: 0;
+}
+.line {
+  right: rem(65px);
+}
+.bar.clicked,
+.line.clicked {
+  background-color: $main;
+}
+.bar-chart,
+.line-chart {
+  min-width: 325px;
+  max-height: 400px;
+  padding-bottom: 70px;
+  padding-top: 20px;
+  display: none !important;
+}
+.bar-chart.active,
+.line-chart.active {
+  display: block !important;
+}
+.interview-question {
+  margin: rem(10px);
+  width: rem(311px);
+  height: rem(150px);
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: space-evenly;
+  position: relative;
+
+  @include mobile {
+    width: 100%;
+    display: block;
+  }
+}
+.question-ellipsis {
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  overflow: hidden;
+  width: rem(300px);
+  margin-top: rem(10px);
+  margin-bottom: rem(10px);
+}
+.record-list {
+  position: relative;
+  display: flex;
+  flex-flow: row wrap;
+  justify-content: flex-start;
+  padding-bottom: rem(20px);
+  column-gap: 20px;
+
+  &__no {
+    border: 1px solid $light-gray;
+    border-radius: 5px;
+    padding: 10px;
+    .download {
+      padding: rem(7px);
+      margin-right: rem(10px);
+      margin-top: rem(10px);
+      background-color: transparent;
+      background-image: url('/src/img/Vector.png');
+      background-size: cover;
+      border: none;
+      position: absolute;
+      top: 10px;
+      right: 0;
+    }
+    &--audio {
+      @include mobile {
+        width: 100%;
+        display: block;
+        margin: 0 auto;
+      }
+    }
+  }
+}
+.scroll-up {
+  position: fixed;
+  bottom: rem(20px);
+  padding: rem(13px);
+  background-image: url('/src/img/Group\ 32.png');
+  background-size: cover;
+  background-color: transparent;
+  border: none;
+  left: 50%;
+  display: none;
+}
