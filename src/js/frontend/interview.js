@@ -187,7 +187,7 @@ $modalActionButton.onclick = async e => {
       const { data } = await axios.post('https://kakaoi-newtone-openapi.kakao.com/v1/synthesize', xmlData, {
         headers: {
           'Content-Type': 'application/xml',
-          Authorization: 'KakaoAK 94d7ab8868125fad5c255d42c430f62a',
+          Authorization: KAKAO_API_KEY,
         },
         responseType: 'arraybuffer',
       });

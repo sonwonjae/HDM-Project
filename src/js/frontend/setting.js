@@ -169,7 +169,7 @@ const render = () => {
   $interviewSetNotice.innerHTML = `<div class="interview-set__notice--selected"><span>선택한 <strong>${selectedCategory}</strong> 면접은
   <strong>${interviewSettingCnt}</strong>문항으로
   약 ${selectedTime * interviewSettingCnt}분동안 진행됩니다.</span></div>
-  <div><span>면접준비가 되었다면 면접 시작하기 버튼을 눌러주세요.</span></div>`;
+  <div class="interview-set__notice--selected"><span>면접준비가 되었다면 면접 시작하기 버튼을 눌러주세요.</span></div>`;
 };
 
 window.addEventListener('DOMContentLoaded', render(), checkMicPermission(), checkCameraPermission());
