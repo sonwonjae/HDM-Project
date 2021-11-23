@@ -1,7 +1,9 @@
 const path = require('path');
 const MiniCssExtractPlugin = require('mini-css-extract-plugin');
 const HtmlWebpackPlugin = require('html-webpack-plugin');
+const webpack = require('webpack');
 const router = require('./src/js/routes');
+require('dotenv').config();
 
 module.exports = {
   // entry file
@@ -22,6 +24,10 @@ module.exports = {
     filename: 'js/[name].bundle.js',
   },
   plugins: [
+    new webpack.DefinePlugin({
+      NEWS_API_KEY: JSON.stringify(process.env.NEWS_API_KEY),
+      KAKAO_API_KEY: JSON.stringify(process.env.KAKAO_API_KEY),
+    }),
     new HtmlWebpackPlugin({
       template: 'src/template/index.html',
       chunks: ['app', 'home'],
